@@ -1,0 +1,1 @@
+find ~/History/ -type f | tr '\n' '\000' | xargs -0 cat | perl -pe 's/ \| /\n/' | perl -pe 's/^ //' | perl -ne 'm/(\S+)\s/;print $1,"\n"'| sort | uniq -c | sort -nr | tee commonCommandsAll_COLLAPSE

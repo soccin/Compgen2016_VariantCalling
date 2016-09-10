@@ -1,0 +1,22 @@
+#!/bin/bash
+
+JAVA=/usr/bin/java
+TMPDIR=/tmp
+
+# Fix Me
+# 
+echo "Fix the path of PICARDJAR"
+PICARDJAR=PICARD/picard-tools-1.140/picard.jar
+echo $PICARDJAR
+
+COMMAND=$1
+shift
+
+if [ "$COMMAND" == "" ]; then
+    $JAVA -jar $PICARDJAR 2>&1 | less -R
+    exit
+fi
+
+VMSIZE=8g
+$JAVA -Xmx$VMSIZE -Djava.io.tmpdir=$TMPDIR \
+    -jar $PICARDJAR $COMMAND TMP_DIR=$TMPDIR VALIDATION_STRINGENCY=SILENT $*
