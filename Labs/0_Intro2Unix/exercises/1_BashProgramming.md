@@ -129,11 +129,16 @@ echo $x
 
 * Google: `bash programming tutorials`
 
-	* http://tldp.org/HOWTO/Bash-Prog-Intro-HOWTO.html
+    * http://tldp.org/LDP/Bash-Beginners-Guide/html/
 
-		* http://tldp.org/LDP/Bash-Beginners-Guide/html/
-	
+	* http://tldp.org/HOWTO/Bash-Prog-Intro-HOWTO.html
+	* http://tldp.org/LDP/abs/html/
+
 	* http://ryanstutorials.net/bash-scripting-tutorial/
+
+## Plug for version control
+
+* Learn and use it. Recomendation `git`
 
 ## Exercise:
 
