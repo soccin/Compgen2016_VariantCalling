@@ -48,24 +48,6 @@
 
 ![](images/illumina.pdf)
 
-# SOLiD
-
-## Sequencing by ligation
-
-![](images/solid.pdf)
-
-# 454/IonTorrent
-
-## Pyrosequencing (H+ sequencing)
-
-![](images/454.pdf)
-
-# PacBio
-
-## Single molecule sequencing (sequencing by video)
-
-![](images/pacBio.pdf)
-
 # Accuracy
 
 - Sanger > SOLiD > Illumina >> 454/IonTorrent >> PacBio
@@ -73,6 +55,8 @@
 	- 454/IonTorrent problem with homopolymers
 
 	- However with the exception of Sanger read length goes up as you move to the right. Less accuracy but longer reads
+	
+	- And Sanger has problem with low frequency events
 
 # pyrosequencing homopolymer problem
 
@@ -100,19 +84,23 @@
 
 # Applications of NGS
 
+- Resequencing: mutation/variant detection
+
+	- Targeted assay (Whole exome, IMPACT)
+		
+		- Go over in great deatil tomorrow
+		
 - RNAseq
 
 - ChIPseq
 
-- other not discussed
+- others not discussed
 
-	- Whole Exome (targeted) sequencing (WES)
-	
 	- Whole Genome Sequencing (WGS)
 	
 	- BiSulfite
 	
-	- Target PCR based
+	- XXXseq
 
 # RNAseq library types (for ChIPSeq guys)
 
@@ -168,7 +156,36 @@
 
 ![](images/chip5.pdf)
 
-# Sequencing data file formats: FASTA/FASTQ
+# Next-gen Sequencing data file formats:
+
+1. Sequence
+
+	* FASTA/FASTQ
+
+2. Alignment/Mapping
+
+	* BAM
+
+3. Variants
+
+	* VCF/MAF
+	
+---
+
+# Sequence data:
+
+## Several format in use
+
+* FASTA/FASTQ
+* SRA (Short read archive)
+* ABI (sanger)
+* Lots of proprietary formats
+* DOC (word)
+* uBAM (unmapped BAM)
+
+---
+
+# Main  format: FASTA/FASTQ
 
 ## Original format: FASTA
 
@@ -177,6 +194,7 @@
 - Basic structure:
 
 ```
+
 >gi|31563518|ref|NP_852610.1| microtubule-associated 
 MKMRFFSSPCGKAAVDPADRCKEVQQIRDQHPSKIPVIIERYKGEKQ
 LPVLDKTKFLVPDHVNMSELVKIIRRRLQLNPTQAFFLLVNQHSMVS
@@ -243,7 +261,7 @@ Q|Perr|Nerr
 
 * Show Samples
 
-# Unix Crash Course
+# Unix Scripting Crash Course
 
 ## History
 
@@ -257,8 +275,6 @@ Q|Perr|Nerr
 
 * Probably will still be using it after we are gone. 
 
-* Might be good idea to learn it (before SKYNET takes over)
-
 # Google has (nearly) all the answers
 
 * You can pretty much ask Google simple computing questions as get answer almost all the time
@@ -267,56 +283,13 @@ Q|Perr|Nerr
 
 # Where to start
 
-*  Most Commonly Used Commands
+* Assume you have basic knowledge of:
 
- | | | | | 
---|--|--|--|--|--
-*fgrep*| 10.81%|**cd**|10.11%|**ls**|8.06%
-**more**|7.77%|**cat**|6.39%|**rm**|3.53%
-*find*|3.23%|xargs|2.69%|cut|2.67%
-egrep|2.41%|mkdir|1.86%|sort|1.76%
-git|1.66%|awk|1.66%|wc|1.58%
-**head**|1.32%|**mv**|1.26%|bjobs|1.23%
-sed|1.22%|*uniq*|1.19%|history|1.00%
-vi|0.97%|**pwd**|0.90%|cp|0.90%
-tr|0.86%|perl|0.77%|du|0.75%
-samtools|0.68%|listCols|0.56%|zcat|0.56%
-hg|0.54%|parseLSFLogs.py|0.49%|tee|0.48%
-chmod|0.45%|rsync|0.43%|*ln*|0.43%
-sudo|0.43%|diff|0.42%|bedtools|0.38%
-
-# Unix I/O conventions
-
-* files / directories 
-* commands
-* I/O redirection, pipes
-
-# Basic unix commands:
-
-## file / directory
-
-* ls, cd, pwd, cat (more/less), rm, mv, mkdir, rmdir
-* wild cards / glob patterns
-
-# Home directory:
-
-```bash
-# Go home
-cd
-```
-
-```bash
-# Show home direcotry
-cd
-pwd
-
-# better (leaves you in where you are)
-
-echo $HOME
-```
-
+	* Basic commands
+	
+	* Files and directories
+	
 # Important intermediate commands
-
 ## `history`
 
 - list and rerun commands
@@ -325,25 +298,11 @@ echo $HOME
 
 - history editting replaced with cut-and-paste
 
-# Important intermediate commands
 ## `man`
 
 - make sure to go over `man`
 
     - `man -k` == `apropos`
-
-# Important intermediate commands
-## `locate`
-
-- make sure to explain caveat that database is **not** updated continuously (usually everyday)
-
-- typically configure to not index user space
-
-    - **NOT** like spotlight
-
-- Mostly useful for system stuff
-
-- works best with `grep`
 
 # Important intermediate commands
 ## `fgrep`, `egrep`, `grep`
@@ -361,25 +320,7 @@ From man page:
 
 i.e., for old people
 
-# Unix cautions
-
-- `mv` semantics can be deceptive
-
-```
-mv file1 file2
-```
-
-This renames `file1` to file `file2` but if `file2` exists it also deletes `file2`
-
-- many people uses alias to redefine defaults to something more forgiving.
-
-For beginners strongly suggest
-
-```
-alias mv="mv -n"
-```
-
-Probably should also do `alias rm="rm -i"`, but gets tedious pretty quickly
+# Shell (Bash) scripting lab
 
 # Parting thought
 
