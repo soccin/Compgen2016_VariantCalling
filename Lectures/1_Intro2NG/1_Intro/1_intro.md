@@ -2,7 +2,9 @@
 
 # Overview
 
-![](images/Slide1.png)
+\begin{center}
+\includegraphics[width=\textwidth]{images/flowchart.png}
+\end{center}
 
 # Computer Stuff
 
@@ -42,11 +44,11 @@
 
 ![3 major sequencing techs](images/3techsZ.png)
 
-# Illumina
+# Illumina: Sequencing by synthesis
 
-## Sequencing by synthesis
-
-![](images/illumina.pdf)
+\begin{center}
+\includegraphics[height=.85\textheight]{images/illumina.pdf}
+\end{center}
 
 # Accuracy
 
@@ -80,7 +82,9 @@
 
 # Paired End Sequencing, II
 
-![](images/01-10.png)
+\begin{center}
+\includegraphics[height=.85\textheight]{images/01-10.png}
+\end{center}
 
 # Applications of NGS
 
@@ -252,8 +256,23 @@ Q|Perr|Nerr
 
 # Q encoding
 
-- ord(c)-33 ==> Q / ord is the ascii value for a character
-- chr(Q+33) ==> Character
+## Illumina 1.8+ $Phred+33$
+
+### $ASCII \rightarrow Q$
+
+$$
+Q \leftarrow ord(C)-33
+$$ 
+
+where `ord` is the ascii value for a character
+
+### $Q \rightarrow ASCII$
+$$
+  C \leftarrow chr(Q+33)
+$$
+
+where `chr` converts an integer to ascii
+
 
 #Quality Control (Manipulating FASTA files)
 
@@ -320,7 +339,130 @@ From man page:
 
 i.e., for old people
 
-# Shell (Bash) scripting lab
+# Shell (Bash) Scripting
+
+* It is possible (and often very usefull) to write programs (usually called scripts) using the `Bash` shell. 
+
+	* Advantage: Syntax very similar to what you do on the command line
+
+	* Disadvantage: Syntax is often confusing and sometimes bizzare. 
+
+* Can be a very powerfull tool for writing _pipelines_: 
+
+	* Pipeline := Typically a series of commands (programs) run in sequence to transform one file/data type to another. 
+
+# Simple variant pipeline in `bash` pseudo-code
+
+\scriptsize
+
+```bash
+#!/bin/bash
+# Map a FASTQ file to the genome post-process BAM file and then call variants
+
+INPUT_FASTQ=$1
+GENOME=$2
+ODIR=$3
+
+TDIR=$ODIR/tmp
+mkdir -p $TDIR
+
+bwa mem $GENOME $INPUT_FASTQ >$TDIR/bwa.sam
+picard SortSam I=$TDIR/bwa.sam O=$TDIR/sort.bam SO=coordinate
+picard MarkDuplicates I=$TDIR/sort.bam O=$TDIR/md.bam M=$ODIR/markDups.txt
+mutect $TDIR/md.bam $ODIR/mutect.vcf
+```
+
+\normalsize
+
+# Run this pipeline with
+
+* If those lines were saved in a file: `variantPipeline.sh` in your current directory you could run it with:
+
+\vfill
+
+\scriptsize
+
+```bash
+$ ./variantPipeline.sh sample1.fastq.gz /genome/human_b37.fa /res/sample1
+```
+
+\vfill
+
+\normalsize
+
+* And you could create another script to process all the FASTQ files in the current directory:
+
+\vfill
+
+\scriptsize
+
+```bash
+#!/bin/bash
+GENOME=/genome/human_b37.fa
+for fastq in *fastq.gz; do
+    ./variantPipeline.sh sample1.fastq.gz $GENOME /res/${fastq/.fastq.gz/}
+done
+```
+
+\vfill
+
+\normalsize
+
+# Alternatives
+
+* If this code looks horrifing or ugly or ..., there are many, many alternatives for writing pipelines
+
+* Can use nearly any programming language that has `system` system call
+	
+	* PERL: `cmd`
+	* Python: lots of choices: subprocess lib best?
+	* C/C++: system()
+	* R: system
+
+* and lots of modules/libraries/packages that will wrap `system` more nicely
+
+* Other shells besides bash:
+
+	* tcsh
+	* zsh
+	* korn
+
+# Alternatives: MAKE-like (implicit)
+
+* make/Makefiles and derivatives
+
+	* Some people love this others find it evil
+
+	* Scons (python)
+	* Rake (ruby)
+	* SnakeMake: (python) somewhat popular in bioinformatics
+	* Nextflow
+	* BigDataScript
+	
+# Alternatives: Workflow systems
+
+* Tons of these; some popular bioinformatics ones
+
+	* bpipe (java/groovy)
+	* Ruffus (python)
+	* Galaxy (www gui)
+	* Taverna (gui)
+
+	* Common Workflow Language (CWL):
+	
+		* Arvados
+
+# Bottom line:
+
+* `Bash` is probably the most awefull in terms of syntax, modern programming ideas (lack of)
+
+* However it is the most light-weight (install nearly everywhere and ready to use), closest to what how we usually work
+
+* Will use `bash` here; strongly encourage you to look at others		
+
+* Reference for comparisons and alternative viewpoints:
+
+> J. Leipzig, A review of bioinformatic pipeline frameworks, Briefings in Bioinformatics, 2016, 1-7
 
 # Parting thought
 

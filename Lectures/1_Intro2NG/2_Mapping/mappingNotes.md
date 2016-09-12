@@ -65,7 +65,7 @@ which is conceptually a pretty simple problem.
 	> In computer science, a suffix tree (also called PAT tree or, in an earlier form, 	position tree) is a compressed trie containing all the suffixes of the given text as their 	keys and positions in the text as their values. Suffix trees allow particularly fast 	implementations of many important string operations.
 	[Suffix tree - Wikipedia](https://en.wikipedia.org/wiki/Suffix_tree)
 	
-	![Wiki](images/495px-Suffix_tree_BANANA.svg.png "Suffix Tree (wiki)")
+	![Wiki](images/495px-Suffix_tree_BANANA.pdf "Suffix Tree (wiki)")
 	
 	- Pros: 
 	
