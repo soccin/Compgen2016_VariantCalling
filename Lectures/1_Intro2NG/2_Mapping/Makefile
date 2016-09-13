@@ -6,7 +6,7 @@ SRC = $(wildcard ?_*.$(MEXT))
 
 PDFS=$(SRC:.md=.pdf)
 
-BEAMERFLAGS=-V theme=Boadilla -V colortheme=beaver -V fonttheme=structurebold -t beamer -fmarkdown-implicit_figures
+BEAMERFLAGS=-V theme=Dresden -V colortheme=beaver -V fonttheme=structurebold -t beamer -fmarkdown-implicit_figures
 
 all: $(PDFS)
 	echo $(PDFS)

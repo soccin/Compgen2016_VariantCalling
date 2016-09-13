@@ -39,7 +39,7 @@ which is conceptually a pretty simple problem.
 
 - But there are two wrinkles (complications):
 
-	- Size (N): len(G)==N is enormouse (3,000,000+ for human)
+	- Size (N): len(G)==N is enormous (3,000,000+ for human)
 	and while len(s)==m is usually tiny (50--200) we have $10^8$
 	to $10^9$ of them
 	
@@ -96,14 +96,12 @@ which is conceptually a pretty simple problem.
 	
 	- Local: Smith-Waterman
 
-# Alignment Algorithms
+# Alignment Algorithms: Pre-next gen methods
 
-## Pre-next gen methods
-
-### BLAST (Basic Local Alignment Search Tool)
+## BLAST (Basic Local Alignment Search Tool)
 http://blast.ncbi.nlm.nih.gov/Blast.cgi
 
-- Very good a searching for extrememly fuzzy (imperfect matches)
+- Very good a searching for extremely fuzzy (imperfect matches)
 - Can index a massive amount of sequence data:
 	- Many (all) genomes and known sequence
 - Great for things like homology seach.
@@ -116,9 +114,7 @@ http://blast.ncbi.nlm.nih.gov/Blast.cgi
 
 # Pre-next gen methods
 
-## Pre-next gen methods
-
-### BLAT (BLAST-like alignment tool)
+## BLAT (BLAST-like alignment tool)
 
 - Designed map large numbers of sequences to a single genome.
 - Sequences that are likely to be from that genome
