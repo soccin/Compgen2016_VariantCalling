@@ -185,7 +185,7 @@ Do the same things you did for the single end case:
   
 Then if there is time; play with the various options in the mappers and see how they effect things. Maybe try BWA ALN (which is not really used anymore but had some nice properties). If you are really adventurous the extra credit is to find other mappers to download and try them; SHRiMP is a personal favorite but it is no longer maintained. But if you need to deal with color data from the SOLiD sequencer is is one of the easiest to use. 
 
-### Data set 3: larger set of target capture data
+### Data set 3: Larger set of target capture data
 
 This next set is a larger set of sequencing data from a target capture array. It is not a real sample as real data from humans is usually protected and requires special permission for access. So it is synthetically generated but tries to mimic real cature data (in the case captures from the IMPACT panel).
 
