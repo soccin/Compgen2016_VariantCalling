@@ -432,3 +432,15 @@ $ which ls
 $
 ```
 
+When you are done you should see something like:
+
+```bash
+$ ./scanPaths.sh ../computationalGenomicsPrograms  | head 
+STAR is in /Users/socci/Transporter/Work/Compgen2016/bin/STAR
+askMeAnything is NOT ON PATH!
+bedtools is in /Users/socci/Transporter/Work/Compgen2016/bin/bedtools
+blast is NOT ON PATH!
+bowtie is NOT ON PATH!
+bwa is in /Users/socci/Transporter/Work/Compgen2016/bin/bwa
+...
+```
