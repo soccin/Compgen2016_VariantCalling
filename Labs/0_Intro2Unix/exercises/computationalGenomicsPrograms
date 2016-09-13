@@ -1,10 +1,10 @@
 STAR
+askMeAnything
 bedtools
 blast
 bowtie
 bwa
 cutadapt
-expandCols
 fasta_formatter
 fasta_nucleotide_changer
 fastq_quality_converter
@@ -19,5 +19,7 @@ fastx_renamer
 fastx_reverse_complement
 fastx_trimmer
 fastx_uncollapser
+oracle
 samtools
+warpDrive
 wgsim
