@@ -412,10 +412,6 @@ Have only scratched the surface. If you are not completely horrified or turned o
 
 2. Structure it cleanly
 
-## Plug for version control
-
-* Learn and use it. Recomendation `git`
-
 ## Exercise:
 
 Scan for the location of all programs listed in the file: 
@@ -444,3 +440,70 @@ bowtie is NOT ON PATH!
 bwa is in /Users/socci/Transporter/Work/Compgen2016/bin/bwa
 ...
 ```
+
+## Plug for version control
+
+* Learn and use it. Recomendation `git`
+
+## `config.sh` script
+
+__ ### VERY IMPORTANT ### __
+
+Please __LISTEN CAREFULLY__ to the following.
+
+### Data paths
+
+First check that the data for the Labs has been loaded correctly. Do the following: 
+
+```bash
+$ md5sum /share/data/compgen2016/day45_Intro2Seq_VarCalling/genomes/H.Sapiens/b37_hl/b37_hl.dict
+```
+
+and you should see:
+
+```bash
+bc303533c68cf74b6f2c705f3d86398c  /share/data/compgen2016/ /b37_hl.dict
+```
+
+where I have drop part of the long path for clarity. 
+
+Now this directory:
+
+* `/share/data/compgen2016/day45_Intro2Seq_VarCalling`
+
+is both long and also going to be used over and over again. There are many ways of dealing with this in UNIX. We are going to create a `config.sh` script that will store and name this and other paths for easy refernce and quick loading. 
+
+In you `home` directory (`/home/guest`) create a `Day45` sub-directory and then two more sub-sub directories: `code`, `results`
+
+You can do this most simply by:
+
+```bash
+$ cd # This takes you home
+$ mkdir Day45
+$ mkdir Day45/code
+$ mkdir Day45/results
+$ cd Day45/code
+```
+
+You should now be in the code subdirectory (check with pwd). Now create/edit a file called `config.sh` and in it put:
+
+```bash
+# Compgen2016 Day 4,5 configuration file
+
+# Path to root of lab data directories
+
+ROOT45=/share/data/compgen2016/day45_Intro2Seq_VarCalling
+```
+
+Once you have this file you want to `source` it so those variable will be set in your current shell environment. Do the following:
+
+```bash
+$ source ~/Day45/code/config.sh
+```
+
+and to make sure everthing is working redo the checksum but this time use the `$ROOT45` variable:
+```bash
+$ md5sum $ROOT45/genomes/H.Sapiens/b37_hl/b37_hl.dict
+bc303533c68cf74b6f2c705f3d86398c  /share/data/compgen2016/...
+```
+
