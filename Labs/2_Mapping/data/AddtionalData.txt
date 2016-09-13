@@ -1,2 +1,0 @@
-Additional Sequence data files are in:
-	Intro2NextGenMaterials/data/2_Mapping/data
