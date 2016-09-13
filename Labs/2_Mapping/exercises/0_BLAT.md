@@ -28,3 +28,7 @@ Answer the following questions (without using google):
 ### For computer scientists
 
 Same questions, but you can use google. 
+
+### Extra, extra credit
+
+* Which of these genes is mostly like to be of interest to one group of mathematics. 
