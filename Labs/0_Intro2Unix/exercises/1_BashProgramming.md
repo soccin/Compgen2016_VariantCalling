@@ -97,15 +97,32 @@ echo $x # Print the value of x
 f $x    # call function f with value of x
 ```
 
-### Exercise: 
+### Using variables:
 
-Modify hello world script to use a variable 
+Here is hello.sh with a variable for output string:
 
-## Environment variables: PATH
+```bash
+#!/bin/bash
+GREETING="Hallo Welt."
+echo $GREETING
+```
 
+## Environment variables
 
+There are a number of preset variables that are create whenever you start a bash shell (command line / terminal). These variable are (mostly) inherited in any bash script you write. They function as _global_ variables but the term used in shells is __Environment__ variables. 
 
-	* which
+To see the environment variables set for your current shell use the `printenv` command. You should see something like:
+
+```bash
+$ printenv
+TERM_PROGRAM=Apple_Terminal
+SHELL=/bin/bash
+TERM=xterm-256color
+HISTSIZE=
+```
+
+> - [ ] Exercise: Figure out what environment variables are different between the command shell and a bash script
+
 
 ## Add language variables
 
