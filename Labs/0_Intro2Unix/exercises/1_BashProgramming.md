@@ -2,7 +2,7 @@
 
 ## Motivation
 
-![](11th_grade_BASH.png)
+![](images/11th_grade_BASH.png)
 
 ## Hello world
 
@@ -97,7 +97,13 @@ echo $x # Print the value of x
 f $x    # call function f with value of x
 ```
 
+### Exercise: 
+
+Modify hello world script to use a variable 
+
 ## Environment variables: PATH
+
+
 
 	* which
 
