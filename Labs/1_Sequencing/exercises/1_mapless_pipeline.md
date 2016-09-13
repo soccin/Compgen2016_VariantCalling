@@ -1,4 +1,14 @@
-# Pooled RNAi pipeline
+# Lab1: Pooled RNAi pipeline
+
+## Preliminaries: paths, conventions
+
+### data path
+
+First check that the data for the Labs has been loaded correctly. Do the following: 
+
+```bash
+$ md5sum /share/data/compgen2016/day45_Intro2Seq_VarCalling/genomes/H.Sapiens/b37_hl/b37_hl.dict
+```
 
 ## Intro
 

@@ -2,7 +2,7 @@
 
 ## Run FASTQC on a sample fastq file
 
-## Look at a selectoin of FASTQ output
+## Look at a selection of FASTQ output
 
 * Triage the various problems
 
