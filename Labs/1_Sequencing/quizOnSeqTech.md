@@ -1,2 +1,0 @@
-# Quiz on sequecing technology
-
