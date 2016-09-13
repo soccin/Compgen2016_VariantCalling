@@ -133,7 +133,7 @@ The main point of this exercise is to learn how to use the mappers; so I am not 
 	$ROOT45/Labs/man/STAR/STARmanual.pdf
 ```
 
-Note, all the mappers output uncompressed plain text SAM files so you can look at them with `more` or `less` or maybe open them with an editor. In fact if you take the first 10-20 lines (with head) you can maybe even open them in excel or some other spreadsheet program. 
+Note, all the mappers can output uncompressed plain text SAM files so you can look at them with `more` or `less` or maybe open them with an editor. In fact if you take the first 10-20 lines (with head) you can maybe even open them in excel or some other spreadsheet program. 
 
 Some things to do. 
 
@@ -162,6 +162,7 @@ Some things to do.
 	  - Bowtie: XG, XM, XN, XO, XS
   You should learn what those they mean and while there is no point memorizing them you should be able to know how to find the meanings of them when needed
   
+- If you have time: __wrap__ the commands with `Bash` scripts. STAR is a prime candiate for this as it has a complex command line and writes lots of files as output so you really one to create a new directory for each STAR run. 
 
 ### Data set 2: paired end data set
 
@@ -185,6 +186,8 @@ Do the same things you did for the single end case:
   
 Then if there is time; play with the various options in the mappers and see how they effect things. Maybe try BWA ALN (which is not really used anymore but had some nice properties). If you are really adventurous the extra credit is to find other mappers to download and try them; SHRiMP is a personal favorite but it is no longer maintained. But if you need to deal with color data from the SOLiD sequencer is is one of the easiest to use. 
 
+
+###TODO###
 ### Data set 3: Larger set of target capture data
 
 This next set is a larger set of sequencing data from a target capture array. It is not a real sample as real data from humans is usually protected and requires special permission for access. So it is synthetically generated but tries to mimic real cature data (in the case captures from the IMPACT panel).
