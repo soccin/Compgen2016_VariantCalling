@@ -7,7 +7,7 @@ In
 	$ROOT45/Labs/2_Mapping/data/exercise_2_1_blat.fasta
 ```
 
-are FASTA sequences from the Human genome. Determine what they are using BLAT (http://genome.ucsc.edu). It is under the tools menu. They sequeces are cDNA from from build hg19. Note; UCSC has now switch over to hg38 as the default. You could probably BLAT these sequences against that build but practice setting the correct genome build hg19. 
+are FASTA sequences from the Human genome. Determine what they are using BLAT (http://genome.ucsc.edu). It is under the tools menu. They sequences are cDNA from from build hg19. Note; UCSC has now switch over to hg38 as the default. You could probably BLAT these sequences against that build but practice setting the correct genome build hg19. 
 
 _N.B._, remember to source your `config.sh` file if you can not find that sequence file.
 
@@ -31,4 +31,4 @@ Same questions, but you can use google.
 
 ### Extra, extra credit
 
-* Which of these genes is mostly like to be of interest to one group of mathematics. 
+* Which of these genes is mostly like to be of interest to one group of mathematicians. 

@@ -64,34 +64,48 @@ and if it is on your path you will see the full directory path to the CMD.
 
 ### Get test genome path
 
-All of the data for this exercise used a reduced version of the human genome (UCSC build hg19) which contained just Chromosomes chr21 & chr22. This was the reduce the size of the files, the amount of memory needed and to reduce run time. At the time I write this I am not sure what the full path to the share drive that contains this genome but by the time your reads this I should know
-```
-	$GENOMEDIR_ROOT
-```
+All of the data for this exercise used a reduced version of the human genome (UCSC build hg19) which contained Chromosomes chr4, chr7, chr12, chr14 and chr17. This was to the reduce the size of the files, the amount of memory needed and to reduce run time. The path to the root folder with all the necesarry genome files is:
 
-Where ever that turns out to be I would define a variable
 ```
-	$GENOMEDIR=$GENOMEDIR_ROOT/Compgen2015/Genomes/Homo_sapiens/UCSC/hg19_test2
+$ROOT45/genomes/H.Sapiens/b37_hl
 ```
 
-which is the path to all the hg19_test2 genome files. This should have the folowing directories:
+Remember that `$ROOT45` is the folder we previous set in our `config.sh` file in `~/Day45/code`. Now is a good time to add some more useful variables to your `config.sh` file. There is not hard and fast convention but I recommend:
 
-path | contents
------|---------
-Annotation/Gene|	Reduced gene GTF (chr21,22)
-Sequence/BWAIndex|	Index for BWA (v7)
-Sequence/Bowtie2Index|	Index for Bowtie2
-Sequence/STARIndex|	Index for STAR (rna aligner)
-Sequence/WholeGenomeFasta| The genome with associated index files
+```bash
+# Compgen2016 Day 4,5 configuration file
 
-Make sure you can find this file. In particular make sure
+# Path to root of lab data directories
+
+ROOT45=/share/data/compgen2016/day45_Intro2Seq_VarCalling
+
+# Genome files
+
+GENOME_BUILD=human_b37
+GENOME_ROOT=$ROOT45/genomes/H.Sapiens/b37_hl
+GENOME_FASTA=$GENOME_ROOT/b37_hl.fa
+GENOME_DICT=$GENOME_ROOT/b37_hl.dict
+GEMOME_BWAIDX=$GENOME_ROOT/index/bwa/b37_hl.fa
 ```
-	head $GENOMEDIR/Sequence/WholeGenomeFasta/genome.fa.fai
+
+Once you have your `config.sh` file setup with the new variables remember to `source` it to get those variables set in your environment. Remember you need to source this file for every new terminal window. If you like you can add this source command to your `.profile` or `.bashrc` file so it is done automatically. 
+
+To check that everything is working ok do the following:
+
+```
+$ cat ${GENOME_FASTA}.fai
 ```
 
->chr21	48129895	7	50	51
->chr22	51304566	49092507	50	51
+if all is good you should see:
+```
+4	191154276	52	60	61
+7	159138663	194340285	60	61
+12	133851895	356131314	60	61
+14	107349540	492214128	60	61
+17	81195210	601352880	60	61
+```
 
+which is the `samtools` fasta index for this genome.
 
 ## Mapping synthetic DNA data.
 
