@@ -2,6 +2,28 @@
 
 ## Preliminaries
 
+### Work directory
+
+__IMPORTANT__ please do not write your output files to the /share/data drive. If everyone tries to do that it is likely to create I/O problems for everyone. Please do output writing to your local disk. You should have created a folder for this by now
+
+```bash
+    ~/Day45/results
+```
+
+If not go ahead and do so and make sure to direct all output there or sub folders there. You can do this in many ways. Perhaps one easy way would be to add a variable to your `config.sh` file:
+
+```bash
+RES=~/Day45/results
+```
+
+and then always prepend this to any output file
+
+```
+$ bwa mem $GENOME R1.f.gz R2.f.gz >$RES/sample.sam
+```
+
+or cd to that directory and do all your work from there.
+
 ### Check path to mapping programs
 
 Most of the modern mappers are pretty easy to use; at least in default mode. First check that 
@@ -24,29 +46,6 @@ Command: index         index sequences in the FASTA format
          mem           BWA-MEM algorithm
 ...
 ```
-
-The one exception is `STAR`. Note only does it have a pretty useless default output
-```
-$ STAR
-
-EXITING because of fatal input ERROR: could not open readFilesIn=Read1
-
-Oct 18 21:38:26 ...... FATAL ERROR, exiting
-```
-
-it does not even have a `-h`, `--help`, `-m` or any of the typical options most unix commands have to get a help or man screen. There is actually on one quasi-useful one: 
-```
-$ STAR --version 
-STAR_2.5.1b
-```
-
-But so long as you do not see:
-```
-$ STAR
--bash: STAR: command not found
-```
-
-they are on your path and executable.
 
 Another way to tell if a command is on your path is to type:
 ```
@@ -152,7 +151,7 @@ Some things to do.
 	
 - Check the % of mapped reads. Think about how to do this; but do not spend too much time. There is a quick script in:
   ```bash
-  $ROOT/Compgen2015/Course/Intro2NextGen/2_Mapping/code/calcPercentMapped.sh
+  $ROOT45/Labs/2_Mapping/code/calcPercentMapped.sh
   ```
   
   which will give the %-mapped and unmapped. In the next module we will use a much more powerfull program to compute mapping statistics. 
@@ -163,6 +162,7 @@ Some things to do.
   You should learn what those they mean and while there is no point memorizing them you should be able to know how to find the meanings of them when needed
   
 - If you have time: __wrap__ the commands with `Bash` scripts. STAR is a prime candiate for this as it has a complex command line and writes lots of files as output so you really one to create a new directory for each STAR run. 
+
 
 ### Data set 2: paired end data set
 
@@ -187,23 +187,31 @@ Do the same things you did for the single end case:
 Then if there is time; play with the various options in the mappers and see how they effect things. Maybe try BWA ALN (which is not really used anymore but had some nice properties). If you are really adventurous the extra credit is to find other mappers to download and try them; SHRiMP is a personal favorite but it is no longer maintained. But if you need to deal with color data from the SOLiD sequencer is is one of the easiest to use. 
 
 
-###TODO###
 ### Data set 3: Larger set of target capture data
 
 This next set is a larger set of sequencing data from a target capture array. It is not a real sample as real data from humans is usually protected and requires special permission for access. So it is synthetically generated but tries to mimic real cature data (in the case captures from the IMPACT panel).
 
+The folder with the data in it is
 ```bash
-	$DATA/Intro2NextGenMaterials/data/2_Mapping
+	$ROOT45/suppData/DNA
 ```
 
 and the files are:
 ```bash
-	sample_DNA_Real_ChIP_Med_SE.fastq.gz
-	sample_DNA_Real_Input_Med_SE.fastq.gz
+	normalP_L016__R1_001.fastq.gz
+	normalP_L016__R2_001.fastq.gz
 ```
 
-Map this data with the mapper of your choice. We will use it in the next two labs. Note, it is single end data with two (2) different samples.
+Map this data with the mapper of your choice. We will use it in the next two labs. Note, it is single end data with two (2) different samples. 
 
 These datasets are large so they might take awhile to map. I suggest running in the background and moving on to the next step mapping RNAseq data
 
-QWERTY
+### MultiCore tests
+
+Your computers have multiple CPU's. To find out how many do
+
+```bash
+cat /proc/cpuinfo | fgrep processor | wc -l
+```
+
+Read the manuals and try remapping the data specifying multiple threads. See how much of a speed up you get. 

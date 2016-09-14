@@ -1,0 +1,303 @@
+<h1 id="lab1-pooled-rnai-pipeline">Lab1: Pooled RNAi pipeline</h1>
+<h2 id="preliminaries-paths-conventions">Preliminaries: paths, conventions</h2>
+<p>Please <strong>READ/LISTEN CAREFULLY</strong> to the following.</p>
+<h3 id="data-paths">Data paths</h3>
+<p>First check that the data for the Labs has been loaded correctly. Do the following:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">md5sum</span> /share/data/compgen2016/day45_Intro2Seq_VarCalling/genomes/H.Sapiens/b37_hl/b37_hl.dict</code></pre></div>
+<p>and you should see:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">bc303533c68cf74b6f2c705f3d86398c</span>  /share/data/compgen2016/ /b37_hl.dict</code></pre></div>
+<p>where I have dropped part of the long path for clarity.</p>
+<p>Now this directory:</p>
+<ul>
+<li><code>/share/data/compgen2016/day45_Intro2Seq_VarCalling</code></li>
+</ul>
+<p>is both long and also going to be used over and over again. There are many ways of dealing with this in UNIX. We are going to create a <code>config.sh</code> script that will store and name this and other paths for easy refernce and quick loading.</p>
+<p>In you <code>home</code> directory (<code>/home/guest</code>) create a <code>Day45</code> sub-directory and then two more sub-sub directories: <code>code</code>, <code>results</code></p>
+<p>You can do this most simply by:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">cd</span> <span class="co"># This takes you home</span>
+$ <span class="kw">mkdir</span> Day45
+$ <span class="kw">mkdir</span> Day45/code
+$ <span class="kw">mkdir</span> Day45/results
+$ <span class="kw">cd</span> Day45/code</code></pre></div>
+<p>You should now be in the code subdirectory (check with pwd). Now create/edit a file called <code>config.sh</code> and in it put:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="co"># Compgen2016 Day 4,5 configuration file</span>
+
+<span class="co"># Path to root of lab data directories</span>
+
+<span class="ot">ROOT45=</span>/share/data/compgen2016/day45_Intro2Seq_VarCalling</code></pre></div>
+<p>Once you have this file you want to <code>source</code> it so those variable will be set in your current shell environment. Do the following:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">source</span> ~/Day45/code/config.sh</code></pre></div>
+<p>and to make sure everthing is working redo the checksum but this time use the <code>$ROOT45</code> variable:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">md5sum</span> <span class="ot">$ROOT45</span>/genomes/H.Sapiens/b37_hl/b37_hl.dict
+<span class="kw">bc303533c68cf74b6f2c705f3d86398c</span>  /share/data/compgen2016/...</code></pre></div>
+<h2 id="intro">Intro</h2>
+<p>While most next generation sequencing analysis pipelines require the data to be mapped to a target genome there are some pipelines that can be done without any alignment step. One such problem is the analysis of pooled shRNA experiments such as in <em>Zuber, et. al, 2011</em>[^Zuber2011]</p>
+<p>In this experiment a library of hairpins is introduced into a population of cells and depending on which hairpin gets incorporated that particular cell my grow or die. By sequencing using primers specific to the hairpin constructs you can determine which shRNA lead to proliferation and survival or arrest.</p>
+<h2 id="sequence-design">Sequence design</h2>
+<p>A typical shRNA construct will look as follows;</p>
+<p><img src="../images/shRNAconstruct.png" title="shRNAconstruct" /></p>
+<p>For this exercise we will focus on a core region that contains the following sequence elements:</p>
+<p><img src="../images/shRNAseqLayout.png" title="shRNAseqLayout" /></p>
+<p>The shRNA sequence goes from position 1 to 22. There is an index sequence that for this example is fixed and is from position 23 to 28 and then an adapter sequence.</p>
+<p>Given a FASTQ file of sequences we want to count the abundance of the shRNA sequences in it. shRNA's with higher abundances may indicate that the gene targeted by them is potentially responsible for limiting cell proliferation (i.e., repressing it activates growth)</p>
+<h2 id="description-of-pipeline">Description of Pipeline</h2>
+<p>The basic outline of the pipeline is as follows</p>
+<ul>
+<li><p><em>Quality Trim</em> to make sure we have high enough Q's at the adapter region. We will trim to a high Q (Q&gt;30) and since we will be using it in a subsequent step we want to make sure we do not trim away the INDEX sequence so set a minimum length after trimming to retain it.</p></li>
+<li><p>Convert from <em>FASTQ to FASTA</em></p></li>
+<li><p><em>Clip</em> Index Sequence, discard sequences without an adapter (quality control) in them or shorter than the length of the shRNA piece.</p></li>
+<li><p><em>Collapse</em> multiple occurrences of the same sequence and get the counts</p></li>
+<li><p>Re-<em>format</em> the FASTQ file into a tabular format</p></li>
+<li><p>Join/annotate shRNA sequences.</p></li>
+</ul>
+<p>The first 5 steps of this pipeline can be done either with programs from the FASTX tool kit or with a custom script/program. The last step will require some programming, but should be doable in R, python or perl and should be simple in any programming langage with decent I/O and string capabilities.</p>
+<p>The input for this pipeline is at:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">    <span class="ot">$ROOT45</span><span class="kw">/Labs/1_Sequencing/data/shRNA_Experiment1.fastq.gz</span></code></pre></div>
+<p>where <code>$ROOT45</code> is the path we set in the <em>Preliminaries</em> section. If this is not setup correctly ask for help.</p>
+<p>You can find a manual for all the FASTX commands either online at:</p>
+<blockquote>
+<p><a href="http://hannonlab.cshl.edu/fastx_toolkit/commandline.html" class="uri">http://hannonlab.cshl.edu/fastx_toolkit/commandline.html</a></p>
+</blockquote>
+<p>or there is a local copy in the course repository at</p>
+<blockquote>
+<p><code>$ROOT45/Labs/man/FASTX/fastxMan.html</code></p>
+</blockquote>
+<p>which you should be able to open in any browser.</p>
+<h2 id="option-1">Option 1</h2>
+<p>If you are not yet comfortable with the UNIX command line and programming then I suggest skipping to the next section: <strong>Pipeline Walkthrough</strong>. In that next section I will step through building this pipeline from the FASTX toolkit programs.</p>
+<p>However, for people already comfortable with the command line and programming I strongly suggest trying to figure out how to code the pipeline from the description above. Find where the FASTX tool kit is installed in your system with</p>
+<pre><code>    which fastq_to_fasta</code></pre>
+<p>if you see nothing then it is not on your path and you will need to find it and add it to your path.</p>
+<p>Then browse the commands available and there features by either <code>ls</code>-ing that directory and running the commands with the <code>-h</code> option:</p>
+<pre><code>    fastq_to_fasta -h</code></pre>
+<p>or use the manual pages linked above and try to build the pipeline. Although you can get something built in less than steps you should use <strong>5</strong> different commands from the toolkit.</p>
+<p>If you run into a snag then just move to the next section. If you do complete the pipeline skip to <strong>Final Steps</strong>.</p>
+<h2 id="pipeline-walkthrough">Pipeline walkthrough</h2>
+<h3 id="preamble">Preamble</h3>
+<p>Although it is usually a really bad idea to do pipelines as command line one liners; for pedagogical reasons we will do exactly that here. The input file is small enough that repeated re-running should not be an issue. However if you feel more comfortable encapsulating the commands in a script then please do so. Make sure if you are going to go the one liner route you understand how to use the command history; in particular how to repeat previous commands. Make sure either CTRL-P or up-arrow work as expected.</p>
+<p>First make sure the FASTX toolkit is on your path. You can do this typing:</p>
+<pre><code>    fastq_to_fasta -h</code></pre>
+<p>you should see something like</p>
+<pre><code>
+usage: fastq_to_fasta [-h] [-r] [-n] [-v] [-z] [-i INFILE] [-o OUTFILE]
+Part of FASTX Toolkit 0.0.13.2 by A. Gordon (gordon@cshl.edu)
+
+   [-h]         = This helpful help screen.
+   [-r]         = Rename sequence identifiers to numbers.
+   [-n]         = keep sequences with unknown (N) nucleotides.
+                  Default is to discard such sequences.</code></pre>
+<p>... (your version number may be different)</p>
+<p>If not or you get an error ask for help. Now check that you can re-run this command using one of the history re-run command methods:</p>
+<ul>
+<li><p>Up-arrow</p></li>
+<li><p>CTRL-p</p></li>
+</ul>
+<p>In fact re-run that command and then reselect it and edit it to run:</p>
+<pre><code>    fastx_renamer -h</code></pre>
+<p>if you new to unix and are having trouble with this ask for help.</p>
+<h3 id="intermediates-pipes-or-files">Intermediates: pipes or files</h3>
+<p>The walk through is going to be using UNIX pipes to chain together the various commands. If this is too complex or confusing or you want to capture the intermediates you can use I/O redirection</p>
+<pre><code>COMMAND &lt;INPUT &gt;OUTPUT</code></pre>
+<p>or if you look at the help screen you will see that most the FASTX commands allow you to specific the input and output file with:</p>
+<pre><code>   [-i INFILE]  = FASTA/Q input file. default is STDIN.
+   [-o OUTFILE] = FASTA/Q output file. default is STDOUT.</code></pre>
+<p>ie, they default to standard input and standard output but you can explicitly set the input and output files or just one or the other.</p>
+<h3 id="step-1-find-input-create-a-work-space">Step 1: find input, create a work space</h3>
+<p>First step is to find the input file: <code>shRNA_Experiment1.fastq.gz</code>. If the course files were installed in your home directory then it should be here:</p>
+<pre><code>    $HOME/Intro2NextGen/1_Sequencing/data/shRNA_Experiment1.fastq.gz</code></pre>
+<p>verify that is is there by doing the following:</p>
+<pre><code>    file $HOME/Intro2NextGen/1_Sequencing/data/shRNA_Experiment1.fastq.gz   </code></pre>
+<p>and you should see something like</p>
+<pre><code>.../Intro2NextGen/1_Sequencing/data/shRNA_Experiment1.fastq.gz: gzip compressed data, from Unix, last modified: Thu Oct 15 18:09:05 2015, max compression</code></pre>
+<p>if you get an error (No such file or directory) ask; there should be a live update as to where these files are. If you are feeling adventurous you can look for it with</p>
+<pre><code>    find $HOME | fgrep shRNA_Experiment1.fastq.gz</code></pre>
+<p>Once you are sure you have the file code the first step of the pipeline. Note; that files ends with a <code>.gz</code> extension. That means the file is compressed (to save space). DNA sequence data is highly redundant and actually compresses quite well. However even compressed the files are usually huge so almost always you will be dealing with compressed files.</p>
+<p>You could uncompress it but for this exercise since we will be using pipes extensively let's just take a look at the top of the file with</p>
+<pre><code>    zcat $HOME/Intro2NextGen/1_Sequencing/data/shRNA_Experiment1.fastq.gz | head</code></pre>
+<p><code>zcat</code> is like <code>cat</code> but decompress first (most systems also have <code>zmore</code>) and <code>head</code> just gives the first 10 or so lines. You should see:</p>
+<pre><code>@COMPGEN:Set1:201510:4:1105:16154:58520 1:N:0:
+TCCAATCTTTTCAGAGTCTGAATACATCTGTGGCTTCACTACCAGATCGT
++
+BBBFFFFFHHHHHJIJDGHJJIJIJJGIHBEFHFHIIGIEHGIICGFGHD
+@COMPGEN:Set1:201510:4:1105:16052:58552 1:Y:0:
+CCCTAGTGAATATTTATTATGAAACATCTGTGGCTTCACTACCAGAACGC
++
+==&gt;;AA+2AA@=&gt;&lt;=@7,?&gt;&gt;=,@3?+&lt;&lt;+@++2AB;@@@A7A&gt;B#####
+@COMPGEN:Set1:201510:4:1105:16106:58578 1:Y:0:
+ACCATAGCATATATCAATGTAATACATCTGTGGCTTCACTACCAGATCGT</code></pre>
+<h3 id="step-2-quality-trim">Step 2: Quality Trim</h3>
+<p>Note strictly necessary but it is often a good idea to quality trim the data. Trimming means remove bases from the sequence that have a Q value below a given threshold, starting from the 3' end and moving to the 5' end. Once you hit a pass that passes the threshold you stop and even if there are low Q bases to the 5' end of this one the trimming ends here. So the first step is to use the trimmer. You are going to use the following command</p>
+<pre><code>    fastq_quality_trimmer -h</code></pre>
+<p>Take a look at the options and see if you can guess what you will need. We want to trim to baseQ 30 and discard sequences that are shorter then 28 because those will not longer have intact INDEX sequences (see figure above). Try to work out the options but here is the command you want:</p>
+<pre><code>    zcat $HOME/Intro2NextGen/1_Sequencing/data/shRNA_Experiment1.fastq.gz | fastq_quality_trimmer -t 30 -l 28 -Q33 -v | head</code></pre>
+<p>That command is so long it is not readable so here are two very, <em>very</em>, useful UNIX features. One variables. You can set the name of that file as a variable and use that instead:</p>
+<pre><code>    INPUT=$HOME/Intro2NextGen/1_Sequencing/data/shRNA_Experiment1.fastq.gz</code></pre>
+<p>Now you can say:</p>
+<pre><code>    zcat $INPUT | fastq_quality_trimmer -t 30 -l 28 -Q33 -v | head</code></pre>
+<p>and you should see:</p>
+<pre><code>@COMPGEN:Set1:201510:4:1105:16154:58520 1:N:0:
+TCCAATCTTTTCAGAGTCTGAATACATCTGTGGCTTCACTACCAGATCGT
++
+BBBFFFFFHHHHHJIJDGHJJIJIJJGIHBEFHFHIIGIEHGIICGFGHD
+@COMPGEN:Set1:201510:4:1105:16052:58552 1:Y:0:
+CCCTAGTGAATATTTATTATGAAACATCTGTGGCTTCACTACCAG
++
+==&gt;;AA+2AA@=&gt;&lt;=@7,?&gt;&gt;=,@3?+&lt;&lt;+@++2AB;@@@A7A&gt;B
+@COMPGEN:Set1:201510:4:1105:16106:58578 1:Y:0:
+ACCATAGCATATATCAATGTAATACATCTGTGGCTTCACTACCAGATCG</code></pre>
+<p><em>N.B.</em> the second sequence was trimmed.</p>
+<p>What do the options means? You should look at the help screen and convince yourself they are what we want. But why <code>-v</code>; what is verbose? It just prints some statistics how many sequences were discard because they were two short after trimming. That info goes to standard error if your are worried about it messing up the pipeline. If you want to see it do:</p>
+<pre><code>    zcat $INPUT | fastq_quality_trimmer -t 30 -l 28 -Q33 -v &gt;/dev/null</code></pre>
+<p>and you should see:</p>
+<pre><code>Minimum Quality Threshold: 30
+Minimum Length: 28
+Input: 100000 reads.
+Output: 99078 reads.
+discarded 922 (0%) too-short reads.</code></pre>
+<p>But what is that <code>-Q33</code> thing. You are not missing it; it is not in the help description. Leave it off and see what happens:</p>
+<pre><code>fastq_quality_trimmer: Invalid quality score value
+(char &#39;+&#39; ord 43 quality value -21) on line 8</code></pre>
+<p>A little special easter egg from the FASTX people. FASTX is fairly old toolkit written in the days when Illumina decided to use their own conventions for encoding quality scores in this case PHRED+64. FASTX defaults to that. However, Illumina finally moved to the standard convention that everyone uses now and all current data is encoded in the PHRED+33 scale. So <code>-Q33</code> tells the program that.</p>
+<p>If you still confused about this issue check out the wiki page: <a href="https://en.wikipedia.org/wiki/FASTQ_format" class="uri">https://en.wikipedia.org/wiki/FASTQ_format</a></p>
+<h3 id="convert-to-fasta-and-clip-adapter">Convert to FASTA and clip adapter</h3>
+<p>We are done with the qualities so we can convert from to FASTA format now and then trim out the adapter. The two programs to do this are</p>
+<pre><code>    fastq_to_fasta
+    fastx_clipper</code></pre>
+<p>And here is the pipeline up to this point:</p>
+<pre><code>    zcat $INPUT | fastq_quality_trimmer -t 30 -l 28 -Q33 -v | fastq_to_fasta -Q33 -v | fastx_clipper -a TACATC -c -l 22 | head</code></pre>
+<p>Again the line is unreadable long so we use another unix convention:</p>
+<pre><code>    zcat $INPUT | fastq_quality_trimmer -t 30 -l 28 -Q33 -v \
+    | fastq_to_fasta -Q33 -v \
+    | fastx_clipper -a TACATC -c -l 22 \
+    | head</code></pre>
+<p>If you end a line with a backslash (<code>\</code>) and <strong>immediately</strong> type return then you do not execute the command but rather the shell starts a new line and lets you continue typing. You <strong>must</strong> not have a space after the backslash.</p>
+<p>If everything worked you should see:</p>
+<pre><code>&gt;COMPGEN:Set1:201510:4:1105:16154:58520 1:N:0:
+TCCAATCTTTTCAGAGTCTGAA
+&gt;COMPGEN:Set1:201510:4:1105:16052:58552 1:Y:0:
+CCCTAGTGAATATTTATTATGA
+&gt;COMPGEN:Set1:201510:4:1105:16106:58578 1:Y:0:
+ACCATAGCATATATCAATGTAA
+&gt;COMPGEN:Set1:201510:4:1105:16098:58591 1:N:0:
+CACTAAGTAAATGTTTAATCAA
+&gt;COMPGEN:Set1:201510:4:1105:16162:58613 1:N:0:
+TCATTTCCATTTTACAAGATAA</code></pre>
+<h3 id="last-step-no-pipes-alternative">Last step: no pipes alternative</h3>
+<p>While this pipeline will be done with pipes as I said it can also be done with saving intermediate files. Here are two versions of the previous piece but this time saving intermediate results to a file.</p>
+<h4 id="version-1-use-file-redirection">version 1: use file redirection</h4>
+<p>With file redirection</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">    <span class="kw">zcat</span> <span class="ot">$INPUT</span> <span class="kw">&gt;</span> step0.out
+    <span class="kw">fastq_quality_trimmer</span> -t 30 -l 28 -Q33 -v <span class="kw">&lt;</span>step0.out <span class="kw">&gt;</span>step1.out
+    <span class="kw">fastq_to_fasta</span> -Q33 -v <span class="kw">&lt;</span>step1.out <span class="kw">&gt;</span>step2.out
+    <span class="kw">fastx_clipper</span> -a TACATC -c -l 22 <span class="kw">&lt;</span>step2.out <span class="kw">&gt;</span>step3.out
+    <span class="kw">head</span> step3.out</code></pre></div>
+<p>The fastx tools also permit another option; use their command line input/output options</p>
+<pre><code>    zcat $INPUT &gt; step0.out
+    fastq_quality_trimmer -t 30 -l 28 -Q33 -v -i step0.out -o step1.out
+    fastq_to_fasta -Q33 -v -i step1.out -o step2.out
+    fastx_clipper -a TACATC -c -l 22 -i step2.out -o step3.out
+    head step3.out</code></pre>
+<p>You may ask why do <code>zcat</code> and write a separate file instead of <code>gunzip</code> and decompress the <code>$INPUT</code>. This is not a hard rule; but I have a strong preference not to modify original/raw input files in anyway. In fact at MSKCC the sequence archive were all sequence data is stored is READ-ONLY; to prevent anyone from accidentally or intentially modify any of the <em>raw</em> data. Using <code>gunzip</code> would modify the original input file (which where I work is not even possible).</p>
+<h2 id="collapse-and-re-format">Collapse and re-format</h2>
+<p>The steps up to this point are actually fairly common in many sequence processing pipeline (except for the conversion from FASTQ to FASTA) and at this point we have trimmed/clipped sequences which in most situation we would now mapped to the appropriate genome. However in this case mapping is unnecessary. The sequences are from a designed screen so we know what they are (and what genes they target) already based on just the sequence. What we want to know is from the starting pool for roughly equally proportioned hairpins which ones were enriched and which were depleted. Simply we want to count them and there is a tool to do that: <code>fastx_collapser</code>. Although not obvious from its name <code>fastx_collapser</code> will collapse multiple copies of the same sequence and will also give you the counts of how many times that copied was in the file.</p>
+<p>Add this step the pipeline with:</p>
+<pre><code>    zcat $INPUT | fastq_quality_trimmer -t 30 -l 28 -Q33 -v \
+    | fastq_to_fasta -Q33 -v \
+    | fastx_clipper -a TACATC -c -l 22 \
+    | fastx_collapser \
+    | head</code></pre>
+<p>and you should see:</p>
+<pre><code>&gt;1-1222
+CCTAGTGAATATTTATTATGAA
+&gt;2-1011
+CACTAAGTAAATGTTTAATCAA
+&gt;3-976
+GAAGGATAAATTAGTAACTTAA
+&gt;4-911
+TACATACATAAATCATTCTTTA
+&gt;5-812
+TCTAATAGAAAATAGAACTCTA</code></pre>
+<p>Were the numbers in the FASTA description line indicate the rank of the sequences counts and the raw count itself; i.e., there were 1,222 copies of the first sequence.</p>
+<p>Technically we are now done, we have the counts, but that is not the more useable of formats. In almost all pipelines the minimal, raw output is often not the most workable so there will often be a number of post-processing steps. One last one using the FASTX tools kit is to convert the FASTA file to a table.</p>
+<pre><code>    zcat $INPUT | fastq_quality_trimmer -t 30 -l 28 -Q33 -v \
+    | fastq_to_fasta -Q33 -v \
+    | fastx_clipper -a TACATC -c -l 22 \
+    | fastx_collapser \
+    | fasta_formatter -t \
+    &gt; countsTable.txt</code></pre>
+<p>This is the end of this stage of the pipeline so we write the file to save it for later use. To see what is in there use the head command: <code>head countsTable.txt</code></p>
+<pre><code>1-1222  CCTAGTGAATATTTATTATGAA
+2-1011  CACTAAGTAAATGTTTAATCAA
+3-976   GAAGGATAAATTAGTAACTTAA
+4-911   TACATACATAAATCATTCTTTA
+5-812   TCTAATAGAAAATAGAACTCTA
+6-809   TACTACTTATACAACAACTTAA
+7-727   TTGCATATTCATTGATAAATAA
+8-671   CTACAGTGTACTTACATACATA
+9-637   GAGAATGTATTCTTAGAATACA
+10-633  TTAAGTGTTATTTGTTATTAAA</code></pre>
+<p>Not the most greatest format but a least is a much more easily parseable table.</p>
+<h2 id="final-steps">Final Steps</h2>
+<p>While the sequences identify the shRNA uniquely a much nicer table for humans would look like this:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Counts</th>
+<th>Sequence</th>
+<th>GeneTarget</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1222</td>
+<td>CCTAGTGAATATTTATTATGAA</td>
+<td>Rpa1_17</td>
+</tr>
+<tr class="even">
+<td>1011</td>
+<td>CACTAAGTAAATGTTTAATCAA</td>
+<td>Mplkip_2466</td>
+</tr>
+<tr class="odd">
+<td>976</td>
+<td>GAAGGATAAATTAGTAACTTAA</td>
+<td>Fancg_37</td>
+</tr>
+<tr class="even">
+<td>911</td>
+<td>TACATACATAAATCATTCTTTA</td>
+<td>Rnaseh2a_928</td>
+</tr>
+</tbody>
+</table>
+<p>Where the identity of the sequences is stored in the file <code>shRNA_Library.fasta</code> which is in the same directory as the input FASTQ file.</p>
+<p>There is no way to do this with the FASTX toolkit. It could be done with a crazy awk or perl one liner. But at this point it is best to write a real program. And since it is likely we are going to be some some sort of statistical analysis on this data it might be best to do this last step in <code>R</code> but if you do not like working with strings in <code>R</code> you could write a short python or perl (or whatever) script that takes the table from the pipeline and the library file and output this file</p>
+<p>However to tie things together and to complete this get the table and gene names into R and make a pie chart of the top 10 shRNA's.</p>
+<p><img src="../images/exercise1.png" title="top10 Pie" /></p>
+<h2 id="extra-credit">Extra credit</h2>
+<p>The FASTX toolkit is very useful but it is very old and not longer actively maintained. In particular the clipper (<code>fastx_clipper</code>) has some very odd behavior and also does not work with PairEnd data; it also is not deterministic (ie you get different answer). From the author himself:</p>
+<blockquote>
+<p>The fastx-clipper was designed to work with short reads (e.g 36nt or 50nt), and be very-sensitive (and somewhat less specific) - it will not perform well with longer reads. I'd recommend trying other clipping programs (e.g. &quot;cutadapt&quot;)</p>
+</blockquote>
+<p>You definitely want to use a more modern adapter. Some alternatives are:</p>
+<ul>
+<li><p>cutadapt</p></li>
+<li><p>TrimGalore (wrapper around cutadapt with defaults)</p></li>
+</ul>
+<p>So if there is time try the following exercise</p>
+<ul>
+<li><p>Rewrite the above pipeline to not use <code>fastx_clipper</code>. Ask if you need a hint but think about it first.</p></li>
+<li><p>Find and install an alternative adapter clipper</p></li>
+</ul>
+<p>You can use the following dataset which is miRNA sequenced to 50bp so every sequence has the adapter in it. This is the Illumina SmallRNA adapter sequence.</p>
+<blockquote>
+<p>&gt;smallRNA 3' Adapter<br />
+tggaattctcgggtgccaaggaactccagtcaca</p>
+</blockquote>
+<p>and you can find the miRNA data at:</p>
+<pre><code>    $ROOT/Intro2NextGen/1_Sequencing/data/miRNA_Dataset.fastq.gz</code></pre>
+<ul>
+<li><p>Or if you just want to practice more with FASTX use it to clip this data set which is what fasts was optimized for.</p></li>
+<li><p>Use the pipeline above (or your own program) to count miRNA sequences; <em>N.B.</em> miRNA are not all the same length so the pipeline I did above will work with miRNA but if you did a short cut pipeline that just extracted the shRNA sequence directly instead of clipping it will not work for miRNA.</p></li>
+</ul>
+<h2 id="references">References</h2>

@@ -30,8 +30,8 @@ if [ -e $OUTDIR ]; then
 fi
 
 mkdir -p $OUTDIR
-cd $OUTDIR
 STAR \
     --genomeDir $GENOMEDIR \
     --readFilesIn $FASTQ_R1 $FASTQ_R2 \
-    --readFilesCommand gzcat 
+    --readFilesCommand gzcat \
+    --outFileNamePrefix $OUTDIR/

@@ -1,4 +1,27 @@
 # RNA mapping with STAR
+
+## Work directory
+
+__IMPORTANT__ please do not write your output files to the /share/data drive. If everyone tries to do that it is likely to create I/O problems for everyone. Please do output writing to your local disk. You should have created a folder for this by now
+
+```bash
+    ~/Day45/results
+```
+
+If not go ahead and do so and make sure to direct all output there or sub folders there. You can do this in many ways. Perhaps one easy way would be to add a variable to your `config.sh` file:
+
+```bash
+RES=~/Day45/results
+```
+
+and then always prepend this to any output file
+
+```
+$ bwa mem $GENOME R1.f.gz R2.f.gz >$RES/sample.sam
+```
+
+or cd to that directory and do all your work from there.
+ 
  
 ## Build STAR index
 
@@ -8,7 +31,7 @@ As with the DNA mappers you first need to build an index. However with many of t
 
 For example in the following image this gene has two possible transcripts
 
-![](../images/junctions.png "junctions")
+![](../images/junctions.png)
 
 So for this gene you would have in the junction database
 
@@ -66,10 +89,10 @@ which is index built with genecode GTF and overhang of 75.
 The sequence data is located at:
 ```
 	$ROOT45/Labs/2_Mapping/data/gencodeTest2_Q30_1_R1.fastq.gz
-	$ROOT/Labs/2_Mapping/data/gencodeTest2_Q30_1_R2.fastq.gz
+	$ROOT45/Labs/2_Mapping/data/gencodeTest2_Q30_1_R2.fastq.gz
 ```
 
-It is paired end data. Also STAR does not read compress files by default so you will need to use the `--readFilesCommand` option with `zcat` for LINUX/UNIX and `zcat` for MAC OS X.
+It is paired end data. Also STAR does not read compress files by default so you will need to use the `--readFilesCommand` option with `zcat` for LINUX/UNIX and `gzcat` for MAC OS X.
 
 STAR also writes a alot of files; not just the output SAM like BWA. So I suggest you create an output directory; maybe call it OUT (`mkdir OUT`) and use the option:
 ```bash
@@ -85,5 +108,22 @@ One last option to use that is not necessary but if you want accurate mapping st
 	--outSAMunmapped Within
 ```
 
+If you did lab 1 then you should have made a wrapper for STAR called wSTAR which you can use for this exercise. Although we did not have the last option `--outSAMunmapped`
+
 BWA outputs unmapped reads automatically; STAR does not. This options tells STAR to do so. If you do not use it then PICARD will not be able to compute percent mapped on the output. 
+
+## Map real dataset
+
+In addition to this synthetic dataset I have also included a real dataset that you can use to practice mapping with STAR. The data is located at:
+```bash
+	$ROOT45/suppData/RNA
+```
+
+and the files are:
+```
+	RNASeqSample1Dn10_SrtQN_L016_R1_001.fastq.gz
+	RNASeqSample1Dn10_SrtQN_L016_R2_001.fastq.gz
+```
+
+Map these and save the output in our `~/Day45/results` directory. We will use in next labs. 
 

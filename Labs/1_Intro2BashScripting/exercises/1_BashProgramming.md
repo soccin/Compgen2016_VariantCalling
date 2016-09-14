@@ -744,11 +744,11 @@ FASTQ_R2=$3
 OUTDIR=$4
 
 mkdir -p $OUTDIR
-cd $OUTDIR
 STAR \
     --genomeDir $GENOMEDIR \
     --readFilesIn $FASTQ_R1 $FASTQ_R2 \
-    --readFilesCommand zcat
+    --readFilesCommand zcat \
+	--outFileNamePrefix $OUTDIR/
 ```
 
 ### Pre-existing output
