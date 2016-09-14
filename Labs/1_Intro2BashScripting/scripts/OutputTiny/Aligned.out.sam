@@ -1,7 +1,0 @@
-@HD	VN:1.4
-@SQ	SN:4	LN:191154276
-@SQ	SN:7	LN:159138663
-@SQ	SN:12	LN:133851895
-@SQ	SN:17	LN:81195210
-@PG	ID:STAR	PN:STAR	VN:STAR_2.5.1b	CL:STAR   --genomeDir /share/data/compgen2016/day45_Intro2Seq_VarCalling/genomes/H.Sapiens/b37_hl/index/star/NoGTF   --readFilesIn /share/data/compgen2016/day45_Intro2Seq_VarCalling/Labs/1_Intro2BashScripting/data/testTiny_R1.fastq.gz   /share/data/compgen2016/day45_Intro2Seq_VarCalling/Labs/1_Intro2BashScripting/da      --readFilesCommand gzcat   
-@CO	user command line: STAR --genomeDir /share/data/compgen2016/day45_Intro2Seq_VarCalling/genomes/H.Sapiens/b37_hl/index/star/NoGTF --readFilesIn /share/data/compgen2016/day45_Intro2Seq_VarCalling/Labs/1_Intro2BashScripting/data/testTiny_R1.fastq.gz /share/data/compgen2016/day45_Intro2Seq_VarCalling/Labs/1_Intro2BashScripting/da --readFilesCommand gzcat

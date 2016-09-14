@@ -1,3 +1,0 @@
-exec > "./_STARtmp/tmp.fifo.read1"
-echo FILE 0
-gzcat      "/share/data/compgen2016/day45_Intro2Seq_VarCalling/Labs/1_Intro2BashScripting/data/testTiny_R1.fastq.gz"
