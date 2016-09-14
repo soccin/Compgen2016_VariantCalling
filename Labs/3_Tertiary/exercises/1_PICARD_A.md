@@ -35,26 +35,26 @@ First find the PICARD JAR file. There should be a copy here:
 ```bash
 ```
 
-I recommend setting the environment variable `PICARDJAR` for ease of use:
+I recommend setting the environment variable `PICARD` for ease of use:
 ```bash
 	PICARD=$ROOT/Intro2NextGen/3_Tertiary/code/picard-tools-1.140/picard.jar
 ```
 
 To test if that worked type:
 ```bash
-	java -jar $PICARDJAR
+	java -jar $PICARD
 ```
 
 You should see a nice colorful (although that depends on your terminal) help screen. You might want to send the output through more (or less) but if you are getting the colors that will be messed up. And it goes to stderr not stdout. But try the following:
 ```bash
-	java -jar $PICARDJAR 2>&1 | less -R
+	java -jar $PICARD 2>&1 | less -R
 ```
 
 to keep the colors and get paging to work.
 
 What we want to do is sort some of the SAM files we generated in the previous exercise. The command to do that is SortSam. PICARD is actually the exact opposite of STAR; while STAR is one of the most unfriendly (almost hostile) of programs I have seen PICARD is super nice and useful. Type
 ```bash
-	java -jar $PICARDJAR SortSam
+	java -jar $PICARD SortSam
 ```
 
 and it will tell you how to run the SortSam command. PICARD does not use the unix convention for command options `-x XYZ`, instead it uses a different one:
@@ -73,7 +73,7 @@ The options is to create an index: `CREATE_INDEX=true`
 
 So get the SAM files we made in the previous exercise ready for use in IGV with the following command.
 ```bash
-	java -jar $PICARDJAR SortSam \
+	java -jar $PICARD SortSam \
 		CREATE_INDEX=true \
 		SO=coordinate \
 		I=inputFile.sam \
@@ -92,7 +92,7 @@ java has be default a very small amount of memory allocated and even the tiny SA
 
 To tell JAVA to use 2Gb you do:
 ```bash
-	java -Xmx2g -jar $PICARDJAR SortSam \
+	java -Xmx2g -jar $PICARD SortSam \
 		CREATE_INDEX=true \
 		SO=coordinate \
 		I=inputFile.sam \

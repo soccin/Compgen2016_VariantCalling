@@ -69,7 +69,7 @@ The sequence data is located at:
 	$ROOT/Labs/2_Mapping/data/gencodeTest2_Q30_1_R2.fastq.gz
 ```
 
-It is paired end data. Also STAR does not read compress files by default so you will need to use the `--readFilesCommand` option with `zcat` for LINUX/UNIX and `gzcat` for MAC OS X.
+It is paired end data. Also STAR does not read compress files by default so you will need to use the `--readFilesCommand` option with `zcat` for LINUX/UNIX and `zcat` for MAC OS X.
 
 STAR also writes a alot of files; not just the output SAM like BWA. So I suggest you create an output directory; maybe call it OUT (`mkdir OUT`) and use the option:
 ```bash

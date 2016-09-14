@@ -553,7 +553,7 @@ STAR \
     --readFilesIn \
     	$ROOT45/Labs/1_Intro2BashScripting/data/testTiny_R1.fastq.gz \
     	$ROOT45/Labs/1_Intro2BashScripting/data/testTiny_R2.fastq.gz \
-    --readFilesCommand gzcat 
+    --readFilesCommand zcat
 ```
 
 Part of this is not `STAR` but the folders I setup. We can fix this by defining some variables:
@@ -570,7 +570,7 @@ STAR \
     --readFilesIn \
     	$DATADIR/testTiny_R1.fastq.gz \
     	$DATADIR/testTiny_R2.fastq.gz \
-    --readFilesCommand gzcat 
+    --readFilesCommand zcat
 ```
 
 But compare this to what we would do with `bwa`
@@ -627,7 +627,7 @@ cd $4
 STAR \
     --genomeDir $1 \
     --readFilesIn $2 $3 \
-    --readFilesCommand gzcat 
+    --readFilesCommand zcat
 ```
 
 Now you can run STAR on the same files as before as:
@@ -717,7 +717,7 @@ cd $4
 STAR \
     --genomeDir $1 \
     --readFilesIn $2 $3 \
-    --readFilesCommand gzcat 
+    --readFilesCommand zcat
 ```
 
 ### Name arguments
@@ -748,7 +748,7 @@ cd $OUTDIR
 STAR \
     --genomeDir $GENOMEDIR \
     --readFilesIn $FASTQ_R1 $FASTQ_R2 \
-    --readFilesCommand gzcat 
+    --readFilesCommand zcat
 ```
 
 ### Pre-existing output
@@ -800,7 +800,7 @@ cd $OUTDIR
 STAR \
     --genomeDir $GENOMEDIR \
     --readFilesIn $FASTQ_R1 $FASTQ_R2 \
-    --readFilesCommand gzcat 
+    --readFilesCommand zcat
 ```
 
 ## Other problems to solve at end:
@@ -897,7 +897,7 @@ Does not seem like a big win but remember we now have a fixed java path so if th
 JAVA=/Library/Java/JavaVirtualMachines/jdk1.8.0_102.jdk/Contents/Home/jre/bin/java
 
 # Path to picard jar
-PICARDJAR=/Users/socci/Desktop/Compgen2016/Work/jars/picard.jar
+PICARD=/Users/socci/Desktop/Compgen2016/Work/jars/picard.jar
 
 # JAVA VM Size
 VMSIZE=4g
@@ -910,12 +910,12 @@ COMMAND=$1
 shift
 
 if [ "$COMMAND" == "" ]; then
-    $JAVA -jar $PICARDJAR 2>&1 | less -R
+    $JAVA -jar $PICARD 2>&1 | less -R
     exit
 fi
 
 $JAVA -Xmx$VMSIZE -Djava.io.tmpdir=$TMPDIR \
-    -jar $PICARDJAR $COMMAND \
+    -jar $PICARD $COMMAND \
     TMP_DIR=$TMPDIR \
     VALIDATION_STRINGENCY=SILENT \
 	$*
