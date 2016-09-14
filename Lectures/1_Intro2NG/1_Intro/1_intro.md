@@ -246,7 +246,10 @@ Q|Perr|Nerr
 10|0.1|1 in 10
 20|0.01|1 in 100
 30|0.001|1 in 1,000
-40|0.0001|1 in 10,000
+40|0.0001|1 in 10,000 
+
+# Q value graph
+![](images/QScorePhred.pdf)
 
 # Q encoding
 

@@ -1,28 +1,18 @@
 # Module 2: Mapping
 
-## Caveat from previous exercise
-
-- Algorithms are not perfect
-
-	- fastx_clipper problems
-
-- you can not write everything from scratch
-
-	- well most people can not (some do when they learn of stuff like this)
-	
-- But you should do you due dillegence when using any algorithm; even very common/popular ones. 
-
-# Introduction
+## Introduction
 
 ## Non-mapping cases
 
-- Exercise pipeline
+Some pipelines do not require a genomic step
+
+- Pooled shRNA/RNAi/CRiSPER libraries
 
 - k-mer based methods
 
 	- Kallisto, Sailfish
 
-# Most of time need to do alignment
+# However, 
 
 - Most bioinformatics pipeline have a mapping step
 
@@ -233,11 +223,11 @@ BWA (now up to version 7) has BWA MEM which is suppose to improve both short rea
 
 - Faster not always better
 
-# RNA (splicing read) aligners
+# Mapping RNAseq data
 
-- Engstrom, et, al. Nature Methods 2013
-
-![](images/engstrom.pdf "splicedAligners")
+\begin{center}
+\includegraphics[height=.9\textheight]{images/RNAMapJunc.pdf}
+\end{center}
 
 # Spliced aligners
 
@@ -257,10 +247,25 @@ BWA (now up to version 7) has BWA MEM which is suppose to improve both short rea
 		- Kallisto
 
 	- Much faster still but at least Sailfish seems to have problems; jury still out on Kallisto but looks promising
+	
+- Many more; over comparison paper
+
+# RNA (splicing read) aligners comparison
+
+- Engstrom, et, al. Nature Methods 2013
+
+![](images/engstrom.pdf "splicedAligners")
+
+# STAR best mapper for RNA variant calling
+
+\begin{center}
+\includegraphics[height=.875\textheight]{images/RNAStar01.pdf}
+\end{center}
+
 
 # Other aligning algorithms
 
-- long read (Roche 454)
+- Long read (Roche 454)
 
 	- bwa bwasa
 	
@@ -268,7 +273,7 @@ BWA (now up to version 7) has BWA MEM which is suppose to improve both short rea
 	
 	- lastz (http://www.bx.psu.edu/~rsharris/lastz/)
 	
-- very long: genome to genome
+- Very long: genome to genome
 
 	- mummer (http://mummer.sourceforge.net)
 	
