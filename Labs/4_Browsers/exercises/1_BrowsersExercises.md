@@ -41,7 +41,7 @@ There are way better tutorials for the Genome Browswer than I could every hope t
 
 # _Advanced_ Fusion detection
 
-In each of the real BAMs from the mapping exercise I have spiked in some fusion (translocation) events. Find them and then look at the in IGV to verify you really got then and what the fusions partners are. You have all the programs you need and all the INFO you need to build your own simple fusion detector. 
+In RNAseq BAMs from the mapping exercise I have spiked in some fusion (translocation) events. Find them and then look at the in IGV to verify you really got then and what the fusions partners are. You have all the programs you need and all the INFO you need to build your own simple fusion detector. 
 
 # _Advanced_ IGV Batch Files
 
