@@ -354,6 +354,12 @@ i.e., for old people
 
 	* Pipeline := Typically a series of commands (programs) run in sequence to transform one file/data type to another. 
 
+* __IMPORTANT__ as was said yesterday; if you want to have _reproducible research_:
+
+	* Everything needs to be a _script_
+	
+	* Does not have to be a bash script but some script
+
 # Simple variant pipeline in `bash` pseudo-code
 
 \scriptsize
