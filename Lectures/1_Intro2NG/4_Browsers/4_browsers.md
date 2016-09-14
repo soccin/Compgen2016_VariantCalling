@@ -2,12 +2,14 @@
 
 ## IGV live demo
 
-- Super Cheap Peak Detector
+- Look at both DNA (targeted) bams
 
-- Start with RNAseq bams
+- RNAseq bams
 
-	- Anonmoulous Features (?)
-	
-	- Fusions
-	
-		- Super Cheap Fusion Detector
+## cBioPortal
+
+- Study chooser
+
+- Gene chooser
+
+- Oncoprint

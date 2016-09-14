@@ -11,7 +11,7 @@ Note the older version of samtools still ranks first in google (http://samtools.
 
 > *General tip*; you should balance sticking with a fixed copy of software versus continually updated to the latest. It is not an easy balance to find. And at some point in research you need to fix/freeze the pipeline in the same way there are data freezes. 
 
-These two packages have a lot of overlap. One big different though is that PICARD does not have any way to stream files while SAMTOOLS does. I am a huge (HUGE) fan of streaming (pipeing) and it really bothers me that PICARD will not let me use that feature of UNIX. However, I **STRONGLY** recommend using PICARD whenever there is a choice. You will be much happier although you will have lots of intermediate files. 
+These two packages have a lot of overlap. One big difference though is that PICARD does not have any way to stream files while SAMTOOLS does. I am a huge (HUGE) fan of streaming (pipeing) and it really bothers me that PICARD will not let me use that feature of UNIX. However, I **STRONGLY** recommend using PICARD whenever there is a choice. You will be much happier although you will have lots of intermediate files. 
 
 The one exception; indexing. If you need a quick way to index `samtools index` is the way to go. 
 
@@ -31,14 +31,13 @@ The first 3 are almost universially needed so most mapping pipelines will simple
 
 PICARD actually has a module for each of these steps; however since most of the time you are manipulating a BAM file you also want to sort and index it you can do all three of the first steps with the sort command. 
 
-First find the PICARD JAR file. I have a copy on the course folder at:
+First find the PICARD JAR file. There should be a copy here:
 ```bash
-	$ROOT/Intro2NextGen/3_Tertiary/code/picard-tools-1.140
 ```
 
 I recommend setting the environment variable `PICARDJAR` for ease of use:
 ```bash
-	PICARDJAR=$ROOT/Intro2NextGen/3_Tertiary/code/picard-tools-1.140/picard.jar
+	PICARD=$ROOT/Intro2NextGen/3_Tertiary/code/picard-tools-1.140/picard.jar
 ```
 
 To test if that worked type:

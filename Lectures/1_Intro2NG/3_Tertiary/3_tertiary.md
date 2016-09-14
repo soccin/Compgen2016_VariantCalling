@@ -6,32 +6,38 @@
 
 - Latest vesion SAMv1 (http://samtools.github.io/hts-specs/)
 
+# SAM File Format
 
-# Highlights
+\begin{center}
+\includegraphics[height=.8\textheight]{images/BAMFormat01General.pdf}
+\end{center}
 
-- Header
+# Header Tags
 
-- Alignment Section
+- `@HD` Version Info
 
-	- FLAG
+- `@SQ` Genome Information (chrom, size, location, species)
 
-	- POS convention (always the 5' end)
-	
-	- MAPQ (read MAQ paper PHRED score for Prob(mismapped))
-	
-	- CIGAR (Does not give mismatches; on IN/DEL; 50M!=perfect match necessarily)
-	
-	- MATE INFO (RNEXT, PNEXT, TLEN)
-	
-	- SEQ
-	
-	- QUAL
-	
-- TAGS
+- `@PG` Program tags. Information on programs that create this BAM
 
-	- Standarized
+- `@RG` Read Groups. Information on origin of sequence data
+
+	- Allows multiple samples to be merged into one BAM
 	
-	- Custom
+- `@CO` Commenents
+
+# Read lines
+
+\begin{center}
+\includegraphics[height=1.8\textheight]{images/SAMReadLines.pdf}
+\end{center}
+
+
+# CIGAR format
+
+\begin{center}
+\includegraphics[height=1.8\textheight]{images/BAMFormat02CIGAR.pdf}
+\end{center}
 
 # Flags
 
@@ -62,10 +68,16 @@
 - PICARD page is a life saver; bookmarkit or download it
 https://broadinstitute.github.io/picard/explain-flags.html
 
+# SAM file example (from STAR)
+
+\begin{center}
+\includegraphics[height=1.8\textheight]{images/SAMOutput_0.pdf}
+\end{center}
 
 
+# Manipulating SAM/BAM files
 
-# Samtools / Picard
+## Samtools vs Picard
 
 - When there is overlap, my honest advice, use Picard
 
@@ -73,48 +85,167 @@ https://broadinstitute.github.io/picard/explain-flags.html
 
 	- But probably should not be doing those anyway
 	
-- However samtools view is prehaps the most used samfile command ever (really)
+- However `samtools view` is prehaps the most used samfile command ever (really)
 
 	- go over options
 	
-	
+# Samtools
+
+\scriptsize
+
+```bash
+$ samtools
+
+Version: 1.3.1 (using htslib 1.3.1)
+
+**   faidx          index/extract FASTA
+     index          index alignment
+
+     reheader       replace BAM header
+!!   rmdup          remove PCR duplicates # Careful Do not Use
+
+**   mpileup        multi-way pileup
+     sort           sort alignment file # Sort to pipes
+     quickcheck     quickly check if SAM/BAM/CRAM file appears intact
+
+     flagstat       simple stats
+     idxstats       BAM index stats
+
+     flags          explain BAM flags
+*    tview          text alignment viewer
+**** view           SAM<->BAM<->CRAM conversion # cat for BAMs
+```
+
+
+		
 # PICARD
 
-- Two main uses
+- manipulating SAM/BAMs
 
-	- manipulating SAM/BAMs
+	- AddRG, Sort, Index & MarkDup in almost every pipeline
+	
+	- Mark Duplicates a key step in many cases
 
-		- AddRG, Sort, Index & MarkDup in almost every pipeline
-		
-		- Mark Duplicates a key step in many cases
+- BAM stats
+
+	- Alignment Stats
 	
-	- BAM stats
+	- Insert Size
 	
-		- Alignment Stats
-		
-		- Insert Size
-		
-		- Duplicates Stats
-	
-		- and a bunch of misc other stuff
+	- Duplicates Stats
+
+	- and a bunch of misc other stuff
 
 - Wins award for friendliest bioinformatics tool
 
-# Mark/Remove Duplicates
+	- Again honest advice if Picards does what you need use it over other tools. 
 
-- PCR amplification is present in almost in all library preps
+# Core modules for Variant Pipeline
 
-- Depending on number of cycles (amount of amplifiction) you can get PCR run aways
-
-	- a single molecule is copied 100-1,000 of times
+- AddOrReplaceReadGroups (AddCommentsToBam)
 	
-- Severe problem in variant (mutation) detection
-
-	- if that molecule had an error the error gets amplified
-
-- Mark Duplicates is a critial part of most pipelines
+	- This one module can do three key step to convert raw SAM output from mappers to BAM
 	
-	- And the duplication statistics are a measure of library quality
+		- Add ReadGroups
+		- Sort (in same step)
+		- Index
+
+- MergeSamFiles
+
+	- Often the Mapping phase is chunked into blocks need to merge before next step
+	
+- MarkDuplicates (MarkDuplicatesWithMateCigar)
+
+	- Gets it own slides
+	
+- Metrics
+
+# Metrics
+
+\scriptsize
+
+```
+CalculateHsMetrics					CollectRrbsMetrics
+CollectAlignmentSummaryMetrics		CollectSequencingArtifactMetrics
+CollectBaseDistributionByCycle		CollectTargetedPcrMetrics
+CollectGcBiasMetrics				CollectVariantCallingMetrics
+CollectHiSeqXPfFailMetrics			CollectWgsMetrics
+CollectHsMetrics					CollectWgsMetricsFromQuerySorted
+CollectInsertSizeMetrics			CollectWgsMetricsFromSampledSites
+CollectJumpingLibraryMetrics		CompareMetrics
+CollectMultipleMetrics				ConvertSequencingArtifactToOxoG
+CollectOxoGMetrics					EstimateLibraryComplexity
+CollectQualityYieldMetrics			MeanQualityByCycle
+CollectRawWgsMetrics				QualityScoreDistribution
+CollectRnaSeqMetrics
+```
+
+# Metrics
+
+\scriptsize
+
+```
+CalculateHsMetrics					
+CollectAlignmentSummaryMetrics		
+		
+CollectHsMetrics					
+CollectInsertSizeMetrics			
+
+									ConvertSequencingArtifactToOxoG
+CollectOxoGMetrics					
+
+CollectRnaSeqMetrics
+```
+
+# Mark Duplicates
+
+\begin{center}
+\includegraphics[height=.9\textheight]{images/MarkDups1.pdf}
+\end{center}
+
+# How to indentify duplicates
+
+- Duplicates might come from the same input DNA template, so we will assume that reads will have same start position on reference
+
+	–  “Where was the first base that was sequenced?”
+	
+	–  For paired-end (PE) reads, same start for both ends
+
+- Identify duplicate sets, then choose representaive read based on base quality scores and other criteria
+
+- Lots of complications:
+
+	- clipping (MarkDuplicatesWithMateCigar)
+	- ...
+
+# Picard tool MarkDuplicates
+
+- Duplicate status is indicated in SAM flag
+
+- Duplicates are not removed, just tagged (unless you request removal)
+
+- Downstream tools can read the tag and choose to ignore those reads
+
+- Most GATK tools ignore duplicates by default
+
+# Sometimes do not want to do this.
+
+- Amplicon sequencing (PCR based assay)
+
+	- all reads start at same position by design
+
+> In somecase if the depth is too large MarkDup's will crash
+
+
+# Different kinds of Noise
+
+- Random/uncorrelated (White) vs correlated/structured/biases (colored)
+
+- Both present challenges for algorithms but non-white noise in many contexts can be especially difficult (if not impossible). 
+	
+	- PCR Duplicates (MarkDups)
+	
+	- Adapter sequences (Clip)
 
 # Multi-mapper issue
 
@@ -139,31 +270,29 @@ https://broadinstitute.github.io/picard/explain-flags.html
 	* impute likely position of multi-mappers by looking at surronding unique mappers. 
 
 
-# Other bioinformatics file formats
-
-## Other range formats
+# Other bioinformatics file formats: BED files
 
 - BED (0-offset)
 
-	- stand 3 column format: 
+	- standard 3 column format: 
 		- chromsome
 		- start (first base is 0)
 		- end
 	
 	- various extended version
 
-- Interval List (1-offest)
+# Picard interval lists
 
-	- Used by Picard: 
-	- Genome Header so you know what the reference is
-	- Standard 5 column format
-		- Chromsome
-		- Start (first base is 1)
-		- End
-		- Strand (REQUIRED)
-		- Feature Name (REQUIRED)
+- Used by Picard: 
+- Genome Header so you know what the reference is
+- Standard 5 column format
+	- Chromsome
+	- Start (first base is 1)
+	- End
+	- Strand (REQUIRED)
+	- Feature Name (REQUIRED)
 	
-# Other range formats, continued
+# Other range formats: GTF,GFF
 
 - GFF/GTF: General Feature Format (1-offset)
 
@@ -197,3 +326,5 @@ https://broadinstitute.github.io/picard/explain-flags.html
 	- VCF
 	
 - Another package that is also very useful: GenomicRanges in `R`
+
+# Lab 3
