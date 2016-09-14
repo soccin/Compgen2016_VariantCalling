@@ -2,7 +2,7 @@
 
 ## Preliminaries: paths, conventions
 
-Please __LISTEN CAREFULLY__ to the following.
+Please __READ/LISTEN CAREFULLY__ to the following.
 
 ### Data paths
 
