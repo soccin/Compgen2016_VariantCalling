@@ -803,6 +803,62 @@ STAR \
     --readFilesCommand gzcat 
 ```
 
+## Other problems to solve at end:
+
+* ???
+
+## Wrap picard (or other jars)
+
+First we need to find them. They should be in 
+
+* `/usr/local`
+
+Good first step is to add the JARS to are `config.sh` script
+
+```bash
+PICARD=/usr/local/XXX/picard.jar
+```
+
+This is what my `config.sh` looks like now:
+
+```bash
+# Compgen2016 Day 4,5 configuration file
+
+# Path to root of lab data directories
+
+ROOT45=/share/data/compgen2016/day45_Intro2Seq_VarCalling
+
+# Put our code directory on our PATH
+
+if [[ ! $PATH =~ Day45/code ]]; then
+	PATH=~/Day45/code:$PATH
+	export PATH
+fi
+
+# JARS
+
+JARDIR=/Users/socci/Desktop/Compgen2016/Work/jars
+PICARD=$JARDIR/picard.jar
+```
+
+Source your file and then test that it worked by doing.
+
+```bash
+java -jar $PICARD
+```
+
+### Why wrap?
+
+* Java versions; major headache some programs need different version of java than others. mutect-1.7 needs JAVA7 (1.7) but latest version is JAVA8 (1.8)
+
+* Check you java version `java -version`, find JAVA7
+
+* Java MEMORY arguments; Picard can use a lot of memory. Useful to just specify a large defualt
+
+* Nicer syntax, on path.
+
+* Shortcuts for commonly used modules
+
 
 ---
 ---
