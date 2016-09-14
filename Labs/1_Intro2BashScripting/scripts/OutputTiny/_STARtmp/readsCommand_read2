@@ -1,0 +1,3 @@
+exec > "./_STARtmp/tmp.fifo.read2"
+echo FILE 0
+gzcat      "/share/data/compgen2016/day45_Intro2Seq_VarCalling/Labs/1_Intro2BashScripting/da"

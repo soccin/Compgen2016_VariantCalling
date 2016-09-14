@@ -37,7 +37,7 @@ Hallo Welt.
 $
 ```
 
-2. Direct executation. You can change/edit this file to make it an executable script. There are two things you need to do in order to do so. 
+2. Direct execution. You can change/edit this file to make it an executable script. There are two things you need to do in order to do so. 
 
 	1. Edit the file and add the following line as the __first__ line of the file.
 	
@@ -49,7 +49,7 @@ $
 	
 	Save the file. 
 	
-	Now try to exectuate it (run it) by typing:
+	Now try to execute it (run it) by typing:
 	```bash
 	$ ./hello.sh
 	```
@@ -127,11 +127,11 @@ TERM=xterm-256color
 HISTSIZE=
 ```
 
-> - [ ] Exercise: Figure out what environment variables are different between the command shell and a bash script. Can you explain why there is this differnce.
+> - [ ] Exercise: Figure out what environment variables are different between the command shell and a bash script. Can you explain why there is this difference.
 
 ### PATH variable
 
-The `PATH` variable is a colon (:) separate list of directories which the shell will look for when looking for commands. You can see what your _path_ is by typeing any of the following
+The `PATH` variable is a colon (:) separate list of directories which the shell will look for when looking for commands. You can see what your _path_ is by typing any of the following
 
 ```
 $ printenv PATH
@@ -195,7 +195,7 @@ if [ $X == "YES" ]; then
 fi
 ```
 
-The syntax is fairly brittle; many of those spaces are required (the ones in the brackets for sure). Note in bash in this context `=` and `==` (as opposed to many other languages). Also do not bash has this annoying (some say charming) way of doing being and end delimiters: `if`---`fi`. But it is not consistent (for loops `for`--`done`). The most aggrevating is case: `case`---`esac`
+The syntax is fairly brittle; many of those spaces are required (the ones in the brackets for sure). Note in bash in this context `=` and `==` (as opposed to many other languages). Also do not bash has this annoying (some say charming) way of doing being and end delimiters: `if`---`fi`. But it is not consistent (for loops `for`--`done`). The most aggravating is case: `case`---`esac`
 
 ```bash
 if [ $X = "YES" ]; then
@@ -237,7 +237,7 @@ fi
 
 ### Multi-lingual hello script
 
-Now lets make a more internationall script. Create a new script called `polyglot.sh` and do the following:
+Now lets make a more international script. Create a new script called `polyglot.sh` and do the following:
 
 ```bash
 #!/bin/bash
@@ -259,7 +259,7 @@ echo $GREETING
 
 ```
 
-Feel free to add more; you can find some of the 2 character langague codes at: (https://en.wikipedia.org/wiki/ISO_639-1). 
+Feel free to add more; you can find some of the 2 character language codes at: (https://en.wikipedia.org/wiki/ISO_639-1). 
 
 Runs the command. How would you set the `$LOCALE` variable? Remember `export`.
 
@@ -293,7 +293,7 @@ There is a more common/convenient way to pass variables to a shell via the comma
 
 * `$#` is equal to the number of arguments passed to the script
 
-* `$*` is set to all the arguments passed to a script (also `$@` which is slightly differnt in a way I still do not fully understand)
+* `$*` is set to all the arguments passed to a script (also `$@` which is slightly different in a way I still do not fully understand)
 
 So we can not modify the `polyglot.sh` script to take its language from the command line. 
 
@@ -333,7 +333,7 @@ for s in $STRINGS; do
 done
 ```
 
-will print each string in the variable. Not this auto-spliting of a variable does not work for literals or when it is quoted. Try:
+will print each string in the variable. Not this auto-splitting of a variable does not work for literals or when it is quoted. Try:
 
 ```bash
 #!/bin/bash
@@ -388,7 +388,7 @@ $ today=`date`
 $ echo $today
 ```
 
-The two have slightly different semantics and `$()` is usally prefered. 
+The two have slightly different semantics and `$()` is usually preferred. 
 
 ## Resources
 
@@ -406,7 +406,7 @@ Have only scratched the surface. If you are not completely horrified or turned o
 
 ## Warning
 
-`bash` often require much more disclipine to write _good_: readable, maintainable, re-useable code then other languages. If you have a script with more than a few lines; you should work hard to 
+`bash` often require much more disciplin to write _good_: readable, maintainable, re-useable code then other languages. If you have a script with more than a few lines; you should work hard to 
 
 1. Comment it well
 
@@ -454,7 +454,7 @@ Now this directory:
 
 * `/share/data/compgen2016/day45_Intro2Seq_VarCalling`
 
-is both long and also going to be used over and over again. There are many ways of dealing with this in UNIX. We are going to create a `config.sh` script that will store and name this and other paths for easy refernce and quick loading. 
+is both long and also going to be used over and over again. There are many ways of dealing with this in UNIX. We are going to create a `config.sh` script that will store and name this and other paths for easy reference and quick loading. 
 
 In you `home` directory (`/home/guest`) create a `Day45` sub-directory and then two more sub-sub directories: `code`, `results`
 
@@ -492,7 +492,7 @@ bc303533c68cf74b6f2c705f3d86398c  /share/data/compgen2016/...
 
 You will need to redo `source ~/Day45/code/config.sh` (or `. ~/Day45/code/config.sh`) for every new shell you create or when you relogin __OR__ whenever you _edit_ the file. This last part is very important. Changing the file does not do anything until you source it. 
 
-For now since we will be changing it alot just remember to re-`source` it everytime you change it or create a new terminal/shell. However you can get it to be sourced everytime you create a new shell by adding it to your `.bashrc` or `.profile` file. (If time demonstrate)
+For now since we will be changing it often just remember to re-`source` it every time you change it or create a new terminal/shell. However you can get it to be sourced every time you create a new shell by adding it to your `.bashrc` or `.profile` file. (If time demonstrate)
 
 ## Wrappers: 
 
@@ -504,7 +504,305 @@ Perhaps one of the most useful thing you can do in `Bash` is _wrap_ programs to:
 
 * Create a more convenient command syntax
 
-A great example of a program begging to be wrapped is STAR. 
+A great example of a programs begging to be wrapped are STAR and Picard.
+
+> No one perfect/correct way to do this. Many different styles. Pick one that works best for you.
+
+### STAR
+
+Compare the default behaviour or `bwa` vs `STAR`. Can we make `STAR` more `bwa` like; _i.e._, more helpful and easier to use. We can do this by writing a script that wraps the running of STAR. 
+
+To start go to your _code_ directory: `cd ~/Day45/code` and edit your `config.sh` script to add the following code:
+
+```bash
+# Put our code directory on our PATH
+#   [[ ]] operator for regular expressions 
+#   =~ regEx match
+#   ! means not
+# [[ ! $X =~ string ]] evaluates to true if
+# string is NOT a substring of X
+# So if ~/Day45/code not already on PATH
+# add it and export it
+
+if [[ ! $PATH =~ Day45/code ]]; then
+	PATH=~/Day45/code:$PATH
+	export PATH
+fi
+
+```
+
+Once you have added this to your `config.sh` source it and check that your code dir is on your `PATH` with `printenv PATH`
+
+> Q: What would happen if you left off `export PATH`? Why is it `export PATH` and not `export $PATH`?
+
+### Now wrap STAR
+
+Want to address several problems:
+
+* Old versions of STAR (<2.4-ish) had no usage. 2.5+ fixes that, kind of but still hard to read/use. 
+
+* STAR writes lots of files and gives them fixed names
+
+* Sane/simple defaults. 
+
+Standard STAR command line:
+
+```bash
+STAR \
+	--genomeDir $ROOT45/genomes/H.Sapiens/b37_hl/index/star/NoGTF \
+    --readFilesIn \
+    	$ROOT45/Labs/1_Intro2BashScripting/data/testTiny_R1.fastq.gz \
+    	$ROOT45/Labs/1_Intro2BashScripting/data/testTiny_R2.fastq.gz \
+    --readFilesCommand gzcat 
+```
+
+Part of this is not `STAR` but the folders I setup. We can fix this by defining some variables:
+
+```
+GENOMESTAR=$ROOT45/genomes/H.Sapiens/b37_hl/index/star/NoGTF
+DATADIR=$ROOT45/Labs/1_Intro2BashScripting/data
+```
+
+So now the command is a little better
+```bash
+STAR \
+	--genomeDir $GENOMESTAR \
+    --readFilesIn \
+    	$DATADIR/testTiny_R1.fastq.gz \
+    	$DATADIR/testTiny_R2.fastq.gz \
+    --readFilesCommand gzcat 
+```
+
+But compare this to what we would do with `bwa`
+
+```
+bwa mem $GENOMEBWA \
+	$DATADIR/testTiny_R1.fastq.gz $DATADIR/testTiny_R2.fastq.gz \
+	> out.sam
+```
+
+So can we wrap `STAR` to behave more like `bwa` but with some enhancements do not like `bwa` writing to `stdout`, but STAR's output is also kind of crazy.
+
+Again make sure you are in `~/Day45/code` and start a new script called: `wSTAR`
+
+```bash
+#!/bin/bash
+
+# wSTAR; wrapper script for STAR
+
+if [ "$#" == "0" ]; then
+	echo "usage: wSTAR GENOMEDIR FASTQ_R1 FASTQ_R2 OUTDIR"
+	exit
+fi
+
+```
+
+remember to do `chmod u+x wSTAR` so you will be able to run it and run it:
+
+```bash
+$ wSTAR
+usage: wSTAR GENOMEDIR FASTQ_R1 FASTQ_R2 OUTDIR
+```
+
+compare to `STAR`'s usage screen. I __strongly__ recommend that for any script you will use more than twice or on different days you do a usage "screen".
+
+Now add the rest:
+
+```bash
+#!/bin/bash
+
+# wSTAR; wrapper script for STAR
+
+# Note change here. Want usage if
+# we run with zero or if we forget one
+# (or add an extra)
+
+if [ "$#" != "4" ]; then
+	echo "usage: wSTAR GENOMEDIR FASTQ_R1 FASTQ_R2 OUTDIR"
+	exit
+fi
+
+mkdir -p $4
+cd $4
+STAR \
+    --genomeDir $1 \
+    --readFilesIn $2 $3 \
+    --readFilesCommand gzcat 
+```
+
+Now you can run STAR on the same files as before as:
+
+```bash
+./wSTAR $ROOT45/genomes/H.Sapiens/b37_hl/index/star/NoGTF 
+	$ROOT45/Labs/1_Intro2BashScripting/data/testTiny_R1.fastq.gz \ 
+	$ROOT45/Labs/1_Intro2BashScripting/data/testTiny_R2.fastq.gz \
+	OutputTiny
+```
+
+Much improved but a number of problems. Try to think how you would improve it further. 
+
+---
+# __PAUSE__
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```
+
+## Improvement / fixes
+
+```bash
+#!/bin/bash
+
+# wSTAR; wrapper script for STAR
+
+# Note change here. Want usage if
+# we run with zero or if we forget one
+# (or add an extra)
+
+if [ "$#" != "4" ]; then
+	echo "usage: wSTAR GENOMEDIR FASTQ_R1 FASTQ_R2 OUTDIR"
+	exit
+fi
+
+mkdir -p $4
+cd $4
+STAR \
+    --genomeDir $1 \
+    --readFilesIn $2 $3 \
+    --readFilesCommand gzcat 
+```
+
+### Name arguments
+
+Not necessary but strongly recommended for clarity, self-documentation and greater flexibility. 
+
+```bash
+#!/bin/bash
+
+# wSTAR; wrapper script for STAR
+
+# Note change here. Want usage if
+# we run with zero or if we forget one
+# (or add an extra)
+
+if [ "$#" != "4" ]; then
+	echo "usage: wSTAR GENOMEDIR FASTQ_R1 FASTQ_R2 OUTDIR"
+	exit
+fi
+
+GENOMEDIR=$1
+FASTQ_R1=$2
+FASTQ_R2=$3
+OUTDIR=$4
+
+mkdir -p $OUTDIR
+cd $OUTDIR
+STAR \
+    --genomeDir $GENOMEDIR \
+    --readFilesIn $FASTQ_R1 $FASTQ_R2 \
+    --readFilesCommand gzcat 
+```
+
+### Pre-existing output
+
+What if we re-run our script with the same `OUTDIR`. It will over write the files there which is _maybe_ ok. But if the second run has an error then the files there will be the original which could be very confusing. So it is much better in cases like this to do one of the following:
+
+* Warn the files/directory already exists and refuse to run
+
+* Delete the previous results first; probably should warn about this.
+
+* Or have a `force` argument to let the user force case 2
+
+I am going to go with (1) and and exit but again this is a style choice. 
+
+```bash
+#!/bin/bash
+
+# wSTAR; wrapper script for STAR
+
+# Note change here. Want usage if
+# we run with zero or if we forget one
+# (or add an extra)
+
+if [ "$#" != "4" ]; then
+	echo "usage: wSTAR GENOMEDIR FASTQ_R1 FASTQ_R2 OUTDIR"
+	exit
+fi
+
+GENOMEDIR=$1
+FASTQ_R1=$2
+FASTQ_R2=$3
+OUTDIR=$4
+
+# file test operators
+# 	    -e == exists
+# See http://tldp.org/LDP/abs/html/fto.html
+# for complete listing
+
+if [ -e $OUTDIR ]; then
+	echo
+	echo "OUTDIR=[$OUTDIR] already exists; will not over write"
+	echo "Choose a new directory or delete OUTDIR to continue"
+	echo
+	exit
+fi
+
+mkdir -p $OUTDIR
+cd $OUTDIR
+STAR \
+    --genomeDir $GENOMEDIR \
+    --readFilesIn $FASTQ_R1 $FASTQ_R2 \
+    --readFilesCommand gzcat 
+```
+
 
 ---
 ---
@@ -540,67 +838,5 @@ bwa is in /Users/socci/Transporter/Work/Compgen2016/bin/bwa
 
 ## Plug for version control
 
-* Learn and use it. Recomendation `git`
-
-## `config.sh` script
-
-__ ### VERY IMPORTANT ### __
-
-Please __LISTEN CAREFULLY__ to the following.
-
-### Data paths
-
-First check that the data for the Labs has been loaded correctly. Do the following: 
-
-```bash
-$ md5sum /share/data/compgen2016/day45_Intro2Seq_VarCalling/genomes/H.Sapiens/b37_hl/b37_hl.dict
-```
-
-and you should see:
-
-```bash
-bc303533c68cf74b6f2c705f3d86398c  /share/data/compgen2016/ /b37_hl.dict
-```
-
-where I have drop part of the long path for clarity. 
-
-Now this directory:
-
-* `/share/data/compgen2016/day45_Intro2Seq_VarCalling`
-
-is both long and also going to be used over and over again. There are many ways of dealing with this in UNIX. We are going to create a `config.sh` script that will store and name this and other paths for easy refernce and quick loading. 
-
-In you `home` directory (`/home/guest`) create a `Day45` sub-directory and then two more sub-sub directories: `code`, `results`
-
-You can do this most simply by:
-
-```bash
-$ cd # This takes you home
-$ mkdir Day45
-$ mkdir Day45/code
-$ mkdir Day45/results
-$ cd Day45/code
-```
-
-You should now be in the code subdirectory (check with pwd). Now create/edit a file called `config.sh` and in it put:
-
-```bash
-# Compgen2016 Day 4,5 configuration file
-
-# Path to root of lab data directories
-
-ROOT45=/share/data/compgen2016/day45_Intro2Seq_VarCalling
-```
-
-Once you have this file you want to `source` it so those variable will be set in your current shell environment. Do the following:
-
-```bash
-$ source ~/Day45/code/config.sh
-```
-
-and to make sure everthing is working redo the checksum but this time use the `$ROOT45` variable:
-```bash
-$ md5sum $ROOT45/genomes/H.Sapiens/b37_hl/b37_hl.dict
-bc303533c68cf74b6f2c705f3d86398c  /share/data/compgen2016/...
-```
+* Learn and use it. Recommendation `git`
 

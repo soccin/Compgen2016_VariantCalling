@@ -18,7 +18,7 @@ and you should see:
 bc303533c68cf74b6f2c705f3d86398c  /share/data/compgen2016/ /b37_hl.dict
 ```
 
-where I have drop part of the long path for clarity. 
+where I have dropped part of the long path for clarity. 
 
 Now this directory:
 

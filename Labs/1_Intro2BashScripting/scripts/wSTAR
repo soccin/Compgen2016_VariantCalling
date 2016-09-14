@@ -1,0 +1,37 @@
+#!/bin/bash
+
+# wSTAR; wrapper script for STAR
+
+# Note change here. Want usage if
+# we run with zero or if we forget one
+# (or add an extra)
+
+if [ "$#" != "4" ]; then
+	echo "usage: wSTAR GENOMEDIR FASTQ_R1 FASTQ_R2 OUTDIR"
+	exit
+fi
+
+GENOMEDIR=$1
+FASTQ_R1=$2
+FASTQ_R2=$3
+OUTDIR=$4
+
+# file test operators
+# 	    -e == exists
+# See http://tldp.org/LDP/abs/html/fto.html
+# for complete listing
+
+if [ -e $OUTDIR ]; then
+	echo
+	echo "OUTDIR=[$OUTDIR] already exists; will not over write"
+	echo "Choose a new directory or delete OUTDIR to continue"
+	echo
+	exit
+fi
+
+mkdir -p $OUTDIR
+cd $OUTDIR
+STAR \
+    --genomeDir $GENOMEDIR \
+    --readFilesIn $FASTQ_R1 $FASTQ_R2 \
+    --readFilesCommand gzcat 

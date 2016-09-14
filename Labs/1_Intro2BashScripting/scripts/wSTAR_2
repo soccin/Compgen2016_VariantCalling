@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# wSTAR; wrapper script for STAR
+
+# Note change here. Want usage if
+# we run with zero or if we forget one
+# (or add an extra)
+
+if [ "$#" != "4" ]; then
+	echo "usage: wSTAR GENOMEDIR FASTQ_R1 FASTQ_R2 OUTDIR"
+	exit
+fi
+
+GENOMEDIR=$1
+FASTQ_R1=$2
+FASTQ_R2=$3
+OUTDIR=$4
+
+mkdir -p $OUTDIR
+cd $OUTDIR
+STAR \
+    --genomeDir $GENOMEDIR \
+    --readFilesIn $FASTQ_R1 $FASTQ_R2 \
+    --readFilesCommand gzcat 
