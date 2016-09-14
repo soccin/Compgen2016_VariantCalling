@@ -859,6 +859,69 @@ java -jar $PICARD
 
 * Shortcuts for commonly used modules
 
+### Simple/minimal Picard wrapper
+
+```bash
+#!/bin/bash
+ 
+# Explict choice of java version
+# Need to set this for your machine
+JAVA=/Library/Java/JavaVirtualMachines/jdk1.8.0_102.jdk/Contents/Home/jre/bin/java
+
+# Path to picard jar
+PICARD=/Users/socci/Desktop/Compgen2016/Work/jars/picard.jar
+
+# JAVA VM Size
+VMSIZE=4g
+
+$JAVA -Xmx$VMSIZE -jar $PICARD $*
+```
+
+So instead of doing:
+```bash
+java -jar $PICARD Command Arg1=Val1 Arg2=Val2 ...
+```
+
+do
+```bash
+picard Command Arg1=Val1 Arg2=Val2 ...
+```
+
+Does not seem like a big win but remember we now have a fixed java path so if the sysadmins decided to update it without telling us either it will not break or the script will fail rather than attempt to run with a possible incompatible java version. Also we have set a better memory size default. But can do more. This is my personal `picard` script
+
+```bash
+#!/bin/bash
+ 
+# Explict choice of java version
+# Need to set this for your machine
+JAVA=/Library/Java/JavaVirtualMachines/jdk1.8.0_102.jdk/Contents/Home/jre/bin/java
+
+# Path to picard jar
+PICARDJAR=/Users/socci/Desktop/Compgen2016/Work/jars/picard.jar
+
+# JAVA VM Size
+VMSIZE=4g
+
+# TMPDIR (on many HPC places using /tmp is a bad idea because it is too small)
+# so I make one in my home directory
+TMPDIR=~/tmp
+
+COMMAND=$1
+shift
+
+if [ "$COMMAND" == "" ]; then
+    $JAVA -jar $PICARDJAR 2>&1 | less -R
+    exit
+fi
+
+$JAVA -Xmx$VMSIZE -Djava.io.tmpdir=$TMPDIR \
+    -jar $PICARDJAR $COMMAND \
+    TMP_DIR=$TMPDIR \
+    VALIDATION_STRINGENCY=SILENT \
+	$*
+```
+
+I have a nicer way of looking at the help screen (it pages), and I also set the TMPDIR explicitly. This is often critical as Picard tmp files can be huge and will over flow many default /tmp installs. 
 
 ---
 ---
