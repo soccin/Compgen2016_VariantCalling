@@ -2,7 +2,7 @@
 
 Nearly all mappers will output a very plain, un-sorted, un-compressed, un-processed SAM file. And most of the various down stream analysis you may want to do: mutation calling, peak calling, gene expression require a more processed output. The requirements are different for the different types of analysis. For mutation calling there is a rather complex serious of steps that need to be done to prepare the mapping files for the mutation calling algoritms. For gene expression counting some programs (like `htseq-count`) require nothing although it is still a good idea to compress the plain text SAM files to BAM's, which are compressed. 
 
-For processing post processing SAM files there are two tools widely in use:
+For post processing SAM files there are two tools widely in use:
 
 * PICARD (http://broadinstitute.github.io/picard/)
 
@@ -33,12 +33,17 @@ PICARD actually has a module for each of these steps; however since most of the 
 
 First find the PICARD JAR file. There should be a copy here:
 ```bash
+/usr/local/picard/build/libs/picard.jar
 ```
 
-I recommend setting the environment variable `PICARD` for ease of use:
+You should add this to your `config.sh` script along with the paths to other jar's we will be using. 
 ```bash
-	PICARD=$ROOT/Intro2NextGen/3_Tertiary/code/picard-tools-1.140/picard.jar
+PICARD=/usr/local/picard/build/libs/picard.jar
+GATK=/usr/local/GATK/GenomeAnalysisTK.jar
+MUTECT=/usr/local/mutect/mutect-1.1.7.jar
+SNPEFF=/usr/local/snpEff/snpEff.jar
 ```
+
 
 To test if that worked type:
 ```bash
@@ -52,7 +57,7 @@ You should see a nice colorful (although that depends on your terminal) help scr
 
 to keep the colors and get paging to work.
 
-What we want to do is sort some of the SAM files we generated in the previous exercise. The command to do that is SortSam. PICARD is actually the exact opposite of STAR; while STAR is one of the most unfriendly (almost hostile) of programs I have seen PICARD is super nice and useful. Type
+What we want to do is sort some of the SAM files we generated in the previous exercise. The command to do that is SortSam. PICARD has super nice and useful help screens. Type
 ```bash
 	java -jar $PICARD SortSam
 ```
@@ -99,6 +104,7 @@ To tell JAVA to use 2Gb you do:
 		O=outputFile.bam 
 ```
 
+If you took the Bash Scripting module you probably already have a script ot wrap picard. If not consider wrapping this now. 
 
 # Picard for stats
 
@@ -141,23 +147,56 @@ will extract the reads that overlap that 1,000bp region. Play with it on the BAM
 
 * indexing large FASTA files and extracting subsequences
 
-You can use `samtools faidx` to both index and then once index extract subsequences from a large FASTA file. For example if you have already run
+You can use `samtools faidx` to both index and then once index extract subsequences from a large FASTA file. This second use case is not well known but can be enormously useful. 
+
+
+For example if you have already run
 ```bash
 	samtools faidx genome.fa
 ```
 
-you will know this is done if there is a file called `genome.fa.fai`, then you can get a piece of the genome with:
-```bash
-	samtools faidx $GENOMEPATH/genome.fa chr22:23456000-23456100
-```
-
-which outputs:
+you will know this is done if there is a file called `genome.fa.fai`, then 
 
 ```bash
->chr22:23456000-23456100
-CTGCCCACCAGGCCTGTCACACAGAGCTCTGGGAAATGGAGATGGGCAGTCAGTGCCAGC
-CAAGGGCAGGCACCCGCTACCGATGGAGGCATGTTGGTCAC
+$ samtools faidx $GENOME_FASTA 7:123456-123557
+>7:123456-123557
+TGGGCCTCATCCATACACTTCCCAGCAACCGTGCATCTCGGCTGGCAGCCTTCACTCCCG
+GAGGGGTGGGTACCGGGGTGGAGGGACGGCATAGGGTGATCC
 ```
+
+# FASTQ \\(\to\\) ProcessedBAM wrapper script
+
+Write a wrapper script that creats finished ready to be analyzed BAMs from FASTQ files. 
+
+It should take as input:
+
+* Path to GENOME_INDEX
+
+* 2 FASTQ files for paired end mapping
+
+	* If you have time make your script work in both PE and SE modes
+	
+* Name of output BAM file. 
+
+So something like:
+
+```bash
+$ mapFastq2BAM $GENOME_BWA \
+	$DATA/samp_R1_.fastq.gz $DATA/samp_R1_.fastq.gz \
+	samp.bam
+```
+
+and the output bam should be:
+
+* Sorted
+
+* be marked with Read Groups: 
+
+	* set SM, LB, PU to samp
+	
+* Have duplicates marked. 
+
+Do this for STAR also if you have time. 
 
 # BEDTOOLS
 

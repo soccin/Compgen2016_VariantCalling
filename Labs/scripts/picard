@@ -1,0 +1,13 @@
+#!/bin/bash
+ 
+# Explict choice of java version
+# Need to set this for your machine
+JAVA=/Library/Java/JavaVirtualMachines/jdk1.8.0_102.jdk/Contents/Home/jre/bin/java
+
+# Path to picard jar
+PICARDJAR=/Users/socci/Desktop/Compgen2016/Work/jars/picard.jar
+
+# JAVA VM Size
+VMSIZE=4g
+
+$JAVA -Xmx$VMSIZE -jar $PICARDJAR $*
