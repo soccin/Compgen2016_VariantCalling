@@ -1,4 +1,23 @@
-# Module 1: Technology
+---
+author: Nicholas Socci
+title: Introduction to Next-Gen Sequencing and Variant Calling 
+date: 2016-09-15
+---
+# Outline
+
+* Day 1: Introduction to next-generation Sequencing
+
+* Day 2: Precision Medicine: Variant Calling Pipeline
+
+* Materials on github at:
+
+> https://github.com/soccin/Compgen2016_VariantCalling
+
+* Data on share drive at:
+
+> `/share/data/compgen2016/day45_Intro2Seq_VarCalling`
+
+# Day 1: Module 1: Technology
 
 # Overview
 
