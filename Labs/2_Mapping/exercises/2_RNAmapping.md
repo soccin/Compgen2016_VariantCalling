@@ -121,8 +121,8 @@ In addition to this synthetic dataset I have also included a real dataset that y
 
 and the files are:
 ```
-	RNASeqSample1Dn10_SrtQN_L016_R1_001.fastq.gz
-	RNASeqSample1Dn10_SrtQN_L016_R2_001.fastq.gz
+RNASeqSample1Dn3_SrtQN_L016_R1_001.fastq.gz
+RNASeqSample1Dn3_SrtQN_L016_R2_001.fastq.gz
 ```
 
 Map these and save the output in our `~/Day45/results` directory. We will use in next labs. 
