@@ -11,11 +11,11 @@ date: 2016-09-15
 
 * Materials on github at:
 
-> https://github.com/soccin/Compgen2016_VariantCalling
+	- https://github.com/soccin/Compgen2016_VariantCalling
 
 * Data on share drive at:
 
-> `/share/data/compgen2016/day45_Intro2Seq_VarCalling`
+	- `/share/data/compgen2016/day45_Intro2Seq_VarCalling`
 
 # Day 1: Module 1: Technology
 
