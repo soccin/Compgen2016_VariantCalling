@@ -29,20 +29,6 @@
 ![BP-Somatic](images/BP_somatic_workflow_mutect1.png)
 
 
-## Philosophy: import this
-
-```python
->>> import this
-```
-> The Zen of Python, by Tim Peters
-
-> Beautiful is better than ugly.
-> __Explicit is better than implicit.__
-> Simple is better than complex.
-> __Readability counts.__
-> __Errors should never pass silently.__
-> Now is better than never.
-
 ## Be Explicit!
 
 * Whenever and as much as possible want to be explicit in your pipelines:
@@ -56,19 +42,6 @@
 
 * Implicitness is nice for development but can be painful in the long run
 
-## QC everything (errors)
+## Annotation
 
-* Bad data is like an error and your pipeline should try to catch as much of it as possible
-
-* Automated QC is best but manually reviewed is better then nothing
-
-## LABS:
-
-### Paths/configs
-
-### QC/FASTQ
-
-### Clipping/Trimming
-
-### Mapping
-
+- Annotation of mutations is 
